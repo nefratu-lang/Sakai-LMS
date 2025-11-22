@@ -156,8 +156,8 @@ const App: React.FC = () => {
               </p>
               
               <SpeakerNote 
-                  title="Önemli" 
-                  text="Sakai'nin temel felsefesi: Sadece bir kurs yazılımı değil, tüm kampüsü kapsayan akademik bir ekosistemdir.Akademik Odak, Mobil Uyum ve Açık Kaynak." 
+                  title="Sistem Felsefesi" 
+                  text="Sakai'nin temel felsefesi: Sadece bir kurs yazılımı değil, tüm kampüsü kapsayan akademik bir ekosistemdir. Akademik Odak, Mobil Uyum ve Açık Kaynak kullanımı." 
               />
             </div>
             <div className="md:col-span-8 text-lg text-slate-600 leading-relaxed space-y-6">
@@ -213,7 +213,7 @@ const App: React.FC = () => {
                         </p>
 
                         <SpeakerNote 
-                            title="SakaiLMS!" 
+                            title="Pedagojik Tasarım" 
                             text="Lessons (Modüller) aracı sistemin kalbidir. Öğrenciyi dağınık kaynaklar arasında kaybolmaktan kurtarır, hedefe yönelik sıralı bir yol sunar" 
                         />
                     </div>
