@@ -157,7 +157,7 @@ const App: React.FC = () => {
               
               <SpeakerNote 
                   title="Önemli" 
-                  text="Akademik Odak (Üniversite için), Mobil Uyum (Telefondan girilebilir) ve Açık Kaynak (Kodlar size ait)." 
+                  text="Sakai'nin temel felsefesi: Sadece bir kurs yazılımı değil, tüm kampüsü kapsayan akademik bir ekosistemdir.Akademik Odak, Mobil Uyum ve Açık Kaynak." 
               />
             </div>
             <div className="md:col-span-8 text-lg text-slate-600 leading-relaxed space-y-6">
