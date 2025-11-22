@@ -6,7 +6,7 @@
 
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Sphere, Torus, Cylinder, Stars, Environment, Box, Icosahedron } from '@react-three/drei';
+import { Float, Sphere, Torus, Icosahedron, Environment, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 
 const FloatingNode = ({ position, color, scale = 1 }: { position: [number, number, number]; color: string; scale?: number }) => {
@@ -52,64 +52,114 @@ const ConnectionRing = () => {
   );
 }
 
+// Helper to create a satellite connected to center with flowing data
+const ConnectedSatellite = ({ rotation, distance, color, speedOffset = 0 }: { rotation: [number, number, number], distance: number, color: string, speedOffset?: number }) => {
+    const groupRef = useRef<THREE.Group>(null);
+    const packetOutRef = useRef<THREE.Mesh>(null);
+    const packetInRef = useRef<THREE.Mesh>(null);
+
+    useFrame((state) => {
+        const t = state.clock.getElapsedTime();
+        
+        // Packet Out (Center -> Satellite)
+        if (packetOutRef.current) {
+           const pos = (t * 1.5 + speedOffset) % 1; 
+           const startX = 0.6;
+           const endX = distance - 0.3;
+           packetOutRef.current.position.x = startX + pos * (endX - startX);
+           
+           // Scale effect: fade in out at ends
+           const scale = Math.sin(pos * Math.PI); 
+           packetOutRef.current.scale.setScalar(0.8 + scale * 0.5);
+           if(packetOutRef.current.material instanceof THREE.MeshBasicMaterial) {
+             packetOutRef.current.material.opacity = scale;
+           }
+        }
+
+        // Packet In (Satellite -> Center)
+        if (packetInRef.current) {
+           const pos = ((t * 1.5 + speedOffset + 0.5) % 1);
+           const startX = distance - 0.3;
+           const endX = 0.6;
+           packetInRef.current.position.x = startX + pos * (endX - startX);
+           
+           const scale = Math.sin(pos * Math.PI);
+           packetInRef.current.scale.setScalar(0.8 + scale * 0.5);
+        }
+    });
+
+    return (
+        <group rotation={rotation} ref={groupRef}>
+             {/* Connection Line - Glowing */}
+             <mesh rotation={[0, 0, -Math.PI / 2]} position={[distance / 2, 0, 0]}>
+                <cylinderGeometry args={[0.03, 0.03, distance, 8]} />
+                <meshStandardMaterial color={color} transparent opacity={0.15} emissive={color} emissiveIntensity={0.2} />
+             </mesh>
+
+             {/* Moving Data Packet OUT */}
+             <mesh ref={packetOutRef} position={[1, 0, 0]}>
+                <sphereGeometry args={[0.06, 16, 16]} />
+                <meshBasicMaterial color={color} toneMapped={false} transparent opacity={0.8} />
+             </mesh>
+             
+             {/* Moving Data Packet IN */}
+             <mesh ref={packetInRef} position={[1, 0, 0]}>
+                <sphereGeometry args={[0.06, 16, 16]} />
+                <meshBasicMaterial color="#ffffff" toneMapped={false} transparent opacity={0.8} />
+             </mesh>
+
+             {/* The Satellite Node */}
+             <mesh position={[distance, 0, 0]}>
+                <sphereGeometry args={[0.25, 32, 32]} />
+                <meshStandardMaterial color={color} metalness={0.7} roughness={0.2} emissive={color} emissiveIntensity={0.2} />
+             </mesh>
+             
+             {/* Satellite Halo Ring */}
+             <mesh position={[distance, 0, 0]} rotation={[Math.PI/2, 0, 0]}>
+                 <torusGeometry args={[0.4, 0.01, 16, 32]} />
+                 <meshBasicMaterial color={color} transparent opacity={0.3} />
+             </mesh>
+        </group>
+    )
+}
+
 const RotatingSystem = () => {
   const groupRef = useRef<THREE.Group>(null);
+  const hubRef = useRef<THREE.Mesh>(null);
 
   useFrame((state, delta) => {
     if (groupRef.current) {
-      // Increased rotation speed significantly for a more dynamic "working system" look
-      groupRef.current.rotation.y += delta * 0.8; 
-      // Add slight wobble
-      groupRef.current.rotation.z = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.1;
+      // Slow rotation of the entire system
+      groupRef.current.rotation.y += delta * 0.15; 
+      groupRef.current.rotation.z = Math.sin(state.clock.getElapsedTime() * 0.2) * 0.05;
+    }
+    if (hubRef.current) {
+        // Pulse effect for central hub
+        const s = 1 + Math.sin(state.clock.getElapsedTime() * 3) * 0.02;
+        hubRef.current.scale.setScalar(s);
     }
   });
 
   return (
     <group ref={groupRef}>
         {/* Central Hub - Server */}
-        <Sphere args={[0.9, 32, 32]} position={[0, 0, 0]}>
-            <meshStandardMaterial color="#0056D2" metalness={0.7} roughness={0.2} emissive="#0056D2" emissiveIntensity={0.2} />
-        </Sphere>
+        <mesh ref={hubRef}>
+            <sphereGeometry args={[0.7, 32, 32]} />
+            <meshStandardMaterial color="#0056D2" metalness={0.9} roughness={0.1} emissive="#0056D2" emissiveIntensity={0.5} />
+        </mesh>
         
-        {/* Orbital Rings (Visualizing Data Flow) */}
-        <Torus args={[2.2, 0.02, 16, 64]} rotation={[Math.PI / 2, 0, 0]}>
-            <meshStandardMaterial color="#94a3b8" transparent opacity={0.3} />
-        </Torus>
-        <Torus args={[1.8, 0.02, 16, 64]} rotation={[Math.PI / 3, Math.PI / 4, 0]}>
-            <meshStandardMaterial color="#94a3b8" transparent opacity={0.3} />
-        </Torus>
+        {/* Outer Network Sphere (Visual Boundary) */}
+        <mesh>
+            <sphereGeometry args={[4, 32, 32]} />
+            <meshBasicMaterial color="#0056D2" wireframe transparent opacity={0.03} />
+        </mesh>
 
-
-        {/* Satellites representing Tools/Users */}
-        {/* Satellite 1 */}
-        <group rotation={[0, 0, Math.PI / 4]}>
-            <Sphere args={[0.25, 16, 16]} position={[2.2, 0, 0]}>
-                <meshStandardMaterial color="#cbd5e1" metalness={0.5} />
-            </Sphere>
-            <Cylinder args={[0.02, 0.02, 2.2, 8]} position={[1.1, 0, 0]} rotation={[0, 0, Math.PI/2]}>
-                <meshStandardMaterial color="#38bdf8" transparent opacity={0.6} />
-            </Cylinder>
-        </group>
-
-        {/* Satellite 2 */}
-        <group rotation={[0, Math.PI / 2, -Math.PI / 6]}>
-            <Sphere args={[0.25, 16, 16]} position={[2.2, 0, 0]}>
-                <meshStandardMaterial color="#38bdf8" emissive="#38bdf8" emissiveIntensity={0.4} />
-            </Sphere>
-            <Cylinder args={[0.02, 0.02, 2.2, 8]} position={[1.1, 0, 0]} rotation={[0, 0, Math.PI/2]}>
-                <meshStandardMaterial color="#38bdf8" transparent opacity={0.6} />
-            </Cylinder>
-        </group>
-
-        {/* Satellite 3 */}
-         <group rotation={[Math.PI/3, Math.PI / 4, 0]}>
-            <Box args={[0.35, 0.35, 0.35]} position={[2.0, 0, 0]}>
-                <meshStandardMaterial color="#1e293b" metalness={0.8} />
-            </Box>
-             <Cylinder args={[0.02, 0.02, 2.0, 8]} position={[1, 0, 0]} rotation={[0, 0, Math.PI/2]}>
-                <meshStandardMaterial color="#38bdf8" transparent opacity={0.6} />
-            </Cylinder>
-        </group>
+        {/* Connected Satellites */}
+        <ConnectedSatellite rotation={[0, 0, Math.PI / 6]} distance={2.2} color="#38bdf8" speedOffset={0} />
+        <ConnectedSatellite rotation={[0, Math.PI * 2/3, -Math.PI / 8]} distance={2.6} color="#a855f7" speedOffset={0.3} />
+        <ConnectedSatellite rotation={[Math.PI / 6, Math.PI * 4/3, 0]} distance={2.0} color="#22c55e" speedOffset={0.6} />
+        <ConnectedSatellite rotation={[-Math.PI / 4, Math.PI / 2, 0]} distance={2.8} color="#f59e0b" speedOffset={0.9} />
+        <ConnectedSatellite rotation={[Math.PI / 3, 0, Math.PI / 4]} distance={3.0} color="#ef4444" speedOffset={0.1} />
     </group>
   );
 }
@@ -142,11 +192,12 @@ export const HeroScene: React.FC = () => {
 export const NetworkScene: React.FC = () => {
   return (
     <div className="w-full h-full absolute inset-0">
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-        <ambientLight intensity={0.8} />
-        <spotLight position={[5, 5, 5]} angle={0.3} penumbra={1} intensity={1} color="#38bdf8" />
+      <Canvas camera={{ position: [0, 0, 6], fov: 40 }}>
+        <ambientLight intensity={0.6} />
+        <pointLight position={[5, 5, 5]} intensity={1.5} color="#ffffff" />
+        <pointLight position={[-5, -5, -5]} intensity={0.5} color="#38bdf8" />
         
-        <Float rotationIntensity={0.2} floatIntensity={0.1} speed={1}>
+        <Float rotationIntensity={0.1} floatIntensity={0.1} speed={0.5}>
           <RotatingSystem />
         </Float>
         

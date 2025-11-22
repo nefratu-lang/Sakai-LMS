@@ -8,7 +8,8 @@ import React, { useState, useEffect } from 'react';
 import { HeroScene, NetworkScene } from './components/QuantumScene';
 import { SakaiModulesDiagram, LTIIntegrationDiagram, StrengthsDiagram } from './components/Diagrams';
 import { SakaiVsCanvas } from './components/SakaiVsCanvas';
-import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School } from 'lucide-react';
+import { SakaiWalkthrough } from './components/SakaiWalkthrough';
+import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay } from 'lucide-react';
 
 const FeatureCard = ({ title, desc, icon: Icon, delay }: { title: string, desc: string, icon: any, delay: string }) => {
   return (
@@ -64,7 +65,7 @@ const App: React.FC = () => {
           <div className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
             <a href="#intro" onClick={scrollToSection('intro')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Tanıtım</a>
             <a href="#features" onClick={scrollToSection('features')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Bileşenler</a>
-            <a href="#analytics" onClick={scrollToSection('analytics')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Analitik</a>
+            <a href="#demo" onClick={scrollToSection('demo')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Demo</a>
             <a href="#proscons" onClick={scrollToSection('proscons')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Artı/Eksi</a>
             <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canvas</a>
             <div className="px-4 py-2 bg-slate-900 text-white rounded-full text-xs shadow-sm">
@@ -83,7 +84,7 @@ const App: React.FC = () => {
         <div className="fixed inset-0 z-40 bg-[#F0F4F8] flex flex-col items-center justify-center gap-8 text-xl font-serif animate-fade-in">
             <a href="#intro" onClick={scrollToSection('intro')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Tanıtım</a>
             <a href="#features" onClick={scrollToSection('features')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Temel Bileşenler</a>
-            <a href="#analytics" onClick={scrollToSection('analytics')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Analitik & İletişim</a>
+            <a href="#demo" onClick={scrollToSection('demo')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Arayüz Simülasyonu</a>
             <a href="#proscons" onClick={scrollToSection('proscons')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Güçlü Yönler</a>
             <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canvas</a>
         </div>
@@ -185,6 +186,22 @@ const App: React.FC = () => {
             </div>
         </section>
 
+        {/* NEW: Walkthrough / Demo Simulation */}
+        <section id="demo" className="py-24 bg-white border-t border-slate-200">
+            <div className="container mx-auto px-6">
+                 <div className="text-center mb-12">
+                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-sakai-blue text-xs font-bold tracking-widest uppercase rounded-full mb-4">
+                        <MonitorPlay size={14}/> CANLI DEMO SİMÜLASYONU
+                     </div>
+                     <h2 className="font-serif text-4xl md:text-5xl text-slate-900 mb-4">Uygulamalı Sistem Turu</h2>
+                     <p className="text-slate-500 max-w-2xl mx-auto">
+                        Gerçek Sakai arayüzü üzerinden içerik oluşturma, grup yönetimi ve ölçme araçlarının işleyişi.
+                     </p>
+                </div>
+                <SakaiWalkthrough />
+            </div>
+        </section>
+
         {/* Integration & Communication */}
         <section id="analytics" className="py-24 bg-slate-900 text-slate-100 overflow-hidden relative">
             <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
@@ -260,8 +277,8 @@ const App: React.FC = () => {
                     <div className="aspect-square bg-slate-900 rounded-xl overflow-hidden relative border border-slate-700 shadow-2xl group">
                         <NetworkScene />
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 text-center backdrop-blur-[2px]">
-                           <div className="text-sakai-accent font-bold text-sm mb-1 uppercase tracking-wider">Sakai Veri Ekosistemi Simülasyonu</div>
-                           <div className="text-xs text-slate-300 opacity-80">Merkezi Sunucu ve Bağlı Modüller Arasındaki Gerçek Zamanlı Veri Akışı</div>
+                           <div className="text-sakai-accent font-bold text-sm mb-1 uppercase tracking-wider">Sakai Veri Ekosistemi</div>
+                           <div className="text-xs text-slate-300 opacity-80">Merkezi Sunucu ve Uydu Modüller Arası Çift Yönlü Veri Transferi</div>
                         </div>
                     </div>
                 </div>
@@ -298,12 +315,12 @@ const App: React.FC = () => {
                         <h3 className="font-bold text-slate-800 mb-2">Resmî Dokümantasyon</h3>
                         <p className="text-sm text-slate-500">Apereo Vakfı ve Sakai Projesi'nin yönetici ve eğitmen rehberleri.</p>
                     </a>
-                    <a href="https://groups.google.com/a/apereo.org/g/sakai-users" target="_blank" rel="noopener noreferrer" className="p-6 bg-slate-50 rounded-lg shadow-sm border border-slate-100 hover:border-sakai-blue hover:shadow-md transition-all group cursor-pointer block">
+                    <a href="https://sakai.screenstepslive.com/s/sakai_help" target="_blank" rel="noopener noreferrer" className="p-6 bg-slate-50 rounded-lg shadow-sm border border-slate-100 hover:border-sakai-blue hover:shadow-md transition-all group cursor-pointer block">
                         <MessageSquare className="mb-4 text-slate-400 group-hover:text-sakai-blue" />
                         <h3 className="font-bold text-slate-800 mb-2">Topluluk Forumları</h3>
                         <p className="text-sm text-slate-500">Google Groups ve Slack üzerinden teknik destek ve en iyi uygulamalar.</p>
                     </a>
-                    <a href="https://www.youtube.com/@SakaiLMS" target="_blank" rel="noopener noreferrer" className="p-6 bg-slate-50 rounded-lg shadow-sm border border-slate-100 hover:border-sakai-blue hover:shadow-md transition-all group cursor-pointer block">
+                    <a href="https://www.youtube.com/@SakaiCLE" target="_blank" rel="noopener noreferrer" className="p-6 bg-slate-50 rounded-lg shadow-sm border border-slate-100 hover:border-sakai-blue hover:shadow-md transition-all group cursor-pointer block">
                         <Video className="mb-4 text-slate-400 group-hover:text-sakai-blue" />
                         <h3 className="font-bold text-slate-800 mb-2">Videolar & Öğreticiler</h3>
                         <p className="text-sm text-slate-500">YouTube ve ticari Sakai partnerlerinin eğitim videoları ve webinarları.</p>
@@ -319,7 +336,7 @@ const App: React.FC = () => {
             <div className="text-center md:text-left">
                 <div className="text-white font-serif font-bold text-2xl mb-2">Sercan UZUN</div>
                 <p className="text-sm">UZE565 Öğrenme Süreçlerinin Tasarımı</p>
-                <p className="text-xs mt-2 opacity-60">Sakai LMS İnceleme Sunumu • 2024</p>
+                <p className="text-xs mt-2 opacity-60">Sakai LMS İnceleme Sunumu • 2025</p>
             </div>
             
             <div className="flex gap-6 text-sm font-medium">
