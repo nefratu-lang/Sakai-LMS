@@ -78,7 +78,7 @@ const App: React.FC = () => {
             <a href="#features" onClick={scrollToSection('features')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Bileşenler</a>
             <a href="#demo" onClick={scrollToSection('demo')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Demo</a>
             <a href="#proscons" onClick={scrollToSection('proscons')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Artı/Eksi</a>
-            <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canvas</a>
+            <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canva</a>
             
             <a 
                 href="https://trysakai.longsight.com/portal/site/6bab8ed5-8859-40f4-8d8a-f50f9da06975" 
@@ -107,7 +107,7 @@ const App: React.FC = () => {
             <a href="#features" onClick={scrollToSection('features')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Temel Bileşenler</a>
             <a href="#demo" onClick={scrollToSection('demo')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Arayüz Simülasyonu</a>
             <a href="#proscons" onClick={scrollToSection('proscons')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Güçlü Yönler</a>
-            <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canvas</a>
+            <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canva</a>
             <a href="https://trysakai.longsight.com/portal/site/6bab8ed5-8859-40f4-8d8a-f50f9da06975" target="_blank" rel="noopener noreferrer" className="text-amber-700 font-bold flex items-center gap-2">
                 <ExternalLink size={20} /> Cloud Server'a Git
             </a>
@@ -313,7 +313,7 @@ const App: React.FC = () => {
              <div className="container mx-auto px-6 flex flex-col items-center">
                  <div className="text-center mb-12">
                      <h2 className="font-serif text-4xl md:text-5xl mb-4 text-slate-900">Pazarın Devleri</h2>
-                     <p className="text-slate-500">Sakai ve Canvas arasındaki temel felsefe farkları.</p>
+                     <p className="text-slate-500">Sakai ve Canva arasındaki temel felsefe farkları.</p>
                 </div>
                 <SakaiVsCanvas />
              </div>
