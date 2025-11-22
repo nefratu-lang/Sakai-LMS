@@ -9,7 +9,7 @@ import { HeroScene, NetworkScene } from './components/QuantumScene';
 import { SakaiModulesDiagram, LTIIntegrationDiagram, StrengthsDiagram } from './components/Diagrams';
 import { SakaiVsCanvas } from './components/SakaiVsCanvas';
 import { SakaiWalkthrough } from './components/SakaiWalkthrough';
-import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay } from 'lucide-react';
+import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay, ExternalLink } from 'lucide-react';
 
 const FeatureCard = ({ title, desc, icon: Icon, delay }: { title: string, desc: string, icon: any, delay: string }) => {
   return (
@@ -62,13 +62,23 @@ const App: React.FC = () => {
             </span>
           </div>
           
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide text-slate-600">
+          <div className="hidden md:flex items-center gap-6 text-sm font-medium tracking-wide text-slate-600">
             <a href="#intro" onClick={scrollToSection('intro')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Tanıtım</a>
             <a href="#features" onClick={scrollToSection('features')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Bileşenler</a>
             <a href="#demo" onClick={scrollToSection('demo')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Demo</a>
             <a href="#proscons" onClick={scrollToSection('proscons')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Artı/Eksi</a>
             <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canvas</a>
-            <div className="px-4 py-2 bg-slate-900 text-white rounded-full text-xs shadow-sm">
+            
+            <a 
+                href="https://trysakai.longsight.com/portal/site/6bab8ed5-8859-40f4-8d8a-f50f9da06975" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-800 hover:bg-amber-200 rounded-full text-xs font-bold uppercase transition-colors border border-amber-200"
+            >
+                <ExternalLink size={14} /> Cloud Server
+            </a>
+
+            <div className="px-4 py-2 bg-slate-900 text-white rounded-full text-xs shadow-sm ml-2">
               Sercan UZUN
             </div>
           </div>
@@ -87,6 +97,9 @@ const App: React.FC = () => {
             <a href="#demo" onClick={scrollToSection('demo')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Arayüz Simülasyonu</a>
             <a href="#proscons" onClick={scrollToSection('proscons')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Güçlü Yönler</a>
             <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canvas</a>
+            <a href="https://trysakai.longsight.com/portal/site/6bab8ed5-8859-40f4-8d8a-f50f9da06975" target="_blank" rel="noopener noreferrer" className="text-amber-700 font-bold flex items-center gap-2">
+                <ExternalLink size={20} /> Cloud Server'a Git
+            </a>
         </div>
       )}
 
