@@ -156,8 +156,8 @@ const App: React.FC = () => {
               </p>
               
               <SpeakerNote 
-                  title="Önemli Vurgu" 
-                  text="Sunumda şunları unutma: Akademik Odak (Üniversite için), Mobil Uyum (Telefondan girilebilir) ve Açık Kaynak (Kodlar bize ait)." 
+                  title="Önemli" 
+                  text="Akademik Odak (Üniversite için), Mobil Uyum (Telefondan girilebilir) ve Açık Kaynak (Kodlar size ait)." 
               />
             </div>
             <div className="md:col-span-8 text-lg text-slate-600 leading-relaxed space-y-6">
@@ -213,8 +213,8 @@ const App: React.FC = () => {
                         </p>
 
                         <SpeakerNote 
-                            title="Kritik Detay" 
-                            text="Lessons (Modüller) aracına 'Sistemin Kalbi' de. Öğrenciyi başıboş bırakmadığını, sıralı bir yolda yürüttüğünü vurgula." 
+                            title="SakaiLMS!" 
+                            text="Lessons (Modüller) aracı sistemin kalbidir. Öğrenciyi dağınık kaynaklar arasında kaybolmaktan kurtarır, hedefe yönelik sıralı bir yol sunar" 
                         />
                     </div>
                     <div>
