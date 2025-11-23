@@ -1,4 +1,3 @@
-
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -8,6 +7,24 @@ import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Sphere, Torus, Icosahedron, Environment, Stars } from '@react-three/drei';
 import * as THREE from 'three';
+
+// Fix for missing JSX type definitions for R3F elements
+// Extend JSX.IntrinsicElements to include Three.js elements used in this file
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      mesh: any;
+      group: any;
+      meshStandardMaterial: any;
+      meshBasicMaterial: any;
+      cylinderGeometry: any;
+      sphereGeometry: any;
+      torusGeometry: any;
+      ambientLight: any;
+      pointLight: any;
+    }
+  }
+}
 
 const FloatingNode = ({ position, color, scale = 1 }: { position: [number, number, number]; color: string; scale?: number }) => {
   const ref = useRef<THREE.Mesh>(null);
