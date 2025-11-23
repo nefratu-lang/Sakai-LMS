@@ -6,59 +6,54 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Book, FileText, MessageCircle, PenTool, CheckCircle, BarChart2, Server, Globe, Shield, Smartphone, DollarSign, Wrench, Link } from 'lucide-react';
+import { Book, FileText, MessageCircle, PenTool, CheckCircle, BarChart2, Server, Globe, Shield, Smartphone, DollarSign, Wrench, Link, ArrowRight } from 'lucide-react';
+
+// --- PROPS FOR CLICK INTERACTION ---
+interface DiagramProps {
+    onClick?: (index: number) => void;
+}
 
 // --- SAKAI MODULES DIAGRAM ---
-export const SakaiModulesDiagram: React.FC = () => {
-  const [activeModule, setActiveModule] = useState<number | null>(0);
+export const SakaiModulesDiagram: React.FC<DiagramProps> = ({ onClick }) => {
+  const [activeModule, setActiveModule] = useState<number | null>(null);
 
   const modules = [
-    { id: 0, title: "Lessons (Modüller)", icon: Book, desc: "Sakai'nin en güçlü aracı. İçerik, görevler ve araçları sıralı bir öğrenme yolunda birleştirir." },
-    { id: 1, title: "Ödevler (Assignments)", icon: FileText, desc: "Turnitin entegrasyonu ile dosya yükleme ve çevrimdışı teslimatları destekler." },
-    { id: 2, title: "Sınav (Tests & Quizzes)", icon: PenTool, desc: "Çoktan seçmeli, doğru/yanlış ve eşleştirme gibi geniş soru tipi desteği sunar." },
-    { id: 3, title: "Forum & İletişim", icon: MessageCircle, desc: "Asenkron tartışma forumları ve anlık sohbet araçları içerir." },
-    { id: 4, title: "Not Defteri", icon: CheckCircle, desc: "Ödev ve sınavlarla entegre çalışan güçlü puanlama sistemi." },
-    { id: 5, title: "İstatistikler", icon: BarChart2, desc: "Öğrenci erişimi ve içerik etkileşim raporları." },
+    { id: 0, title: "Lessons (Modüller)", icon: Book },
+    { id: 1, title: "Ödevler (Assignments)", icon: FileText },
+    { id: 2, title: "Sınav (Tests & Quizzes)", icon: PenTool },
+    { id: 3, title: "Forum & İletişim", icon: MessageCircle },
+    { id: 4, title: "Not Defteri", icon: CheckCircle },
+    { id: 5, title: "Kaynaklar (Resources)", icon: BarChart2 },
   ];
 
   return (
     <div className="flex flex-col items-center p-8 bg-white rounded-xl shadow-sm border border-slate-200 my-8">
       <h3 className="font-serif text-xl mb-4 text-slate-800">İnteraktif: Ders Araçları</h3>
       <p className="text-sm text-slate-500 mb-8 text-center max-w-md">
-        Sakai araçlarını keşfetmek için ikonlara tıklayın.
+        Detaylı teknik inceleme için modül ikonlarına tıklayın.
       </p>
       
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-3 gap-4 mb-4">
         {modules.map((m, idx) => {
             const Icon = m.icon;
-            const isActive = activeModule === idx;
             return (
                 <button
                     key={idx}
-                    onClick={() => setActiveModule(idx)}
-                    className={`w-20 h-20 rounded-xl flex flex-col items-center justify-center gap-2 transition-all duration-300 border-2 ${isActive ? 'border-sakai-blue bg-sakai-blue text-white shadow-lg scale-105' : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-sakai-blue/30 hover:bg-white'}`}
+                    onClick={() => onClick && onClick(idx)}
+                    onMouseEnter={() => setActiveModule(idx)}
+                    onMouseLeave={() => setActiveModule(null)}
+                    className="group relative w-24 h-24 rounded-xl flex flex-col items-center justify-center gap-2 transition-all duration-300 border-2 border-slate-100 bg-slate-50 text-slate-500 hover:border-sakai-blue hover:bg-white hover:text-sakai-blue hover:shadow-lg hover:-translate-y-1"
                 >
-                    <Icon size={24} />
+                    <Icon size={28} />
+                    <span className="text-[10px] font-bold text-center px-1">{m.title}</span>
+                    
+                    {/* Hover Hint */}
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ArrowRight size={12} className="text-sakai-blue"/>
+                    </div>
                 </button>
             )
         })}
-      </div>
-
-      <div className="w-full h-32 p-4 bg-slate-50 rounded-lg border border-slate-100 flex flex-col items-center text-center justify-center relative overflow-hidden">
-           <AnimatePresence mode="wait">
-               {activeModule !== null && (
-                   <motion.div 
-                        key={activeModule}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="absolute inset-0 p-4 flex flex-col items-center justify-center"
-                   >
-                       <h4 className="font-bold text-sakai-blue mb-2">{modules[activeModule].title}</h4>
-                       <p className="text-sm text-slate-600">{modules[activeModule].desc}</p>
-                   </motion.div>
-               )}
-           </AnimatePresence>
       </div>
     </div>
   );
@@ -142,15 +137,15 @@ export const StrengthsDiagram: React.FC = () => {
     const data = {
         pros: [
             { title: "Açık Kaynak & Lisanssız", val: 95, icon: CheckCircle },
-            { title: "Akademik Odaklı Araçlar", val: 90, icon: Book },
-            { title: "Tam Özelleştirme", val: 100, icon: Wrench },
+            { title: "Akademik DNA (Vakıf)", val: 90, icon: Book },
+            { title: "Tam Özelleştirme (Kod)", val: 100, icon: Wrench },
             { title: "Veri Güvenliği (Yerel)", val: 95, icon: Shield },
         ],
         cons: [
             { title: "Kullanıcı Deneyimi (UX)", val: 60, icon: Smartphone },
-            { title: "Toplam Sahip Olma Maliyeti (TCO)", val: 80, icon: DollarSign },
-            { title: "Mobil Uygulama", val: 50, icon: Smartphone },
-            { title: "Teknik Bakım Zorluğu", val: 75, icon: Server },
+            { title: "TCO (Bakım Maliyeti)", val: 80, icon: DollarSign },
+            { title: "Mobil App (Native vs Web)", val: 50, icon: Smartphone },
+            { title: "Teknik Uzmanlık Gereği", val: 75, icon: Server },
         ]
     };
 
