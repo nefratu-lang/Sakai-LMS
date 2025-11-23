@@ -6,11 +6,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Book, FileText, MessageCircle, PenTool, CheckCircle, BarChart2, Server, Globe, Shield, Smartphone, DollarSign, Wrench, Link, ArrowRight } from 'lucide-react';
+import { Book, FileText, MessageCircle, PenTool, CheckCircle, BarChart2, Server, Globe, Shield, Smartphone, DollarSign, Wrench, Link, ArrowRight, Info } from 'lucide-react';
 
 // --- PROPS FOR CLICK INTERACTION ---
 interface DiagramProps {
     onClick?: (index: number) => void;
+}
+
+interface StrengthsProps {
+    onClick?: (id: string) => void;
 }
 
 // --- SAKAI MODULES DIAGRAM ---
@@ -131,21 +135,21 @@ export const LTIIntegrationDiagram: React.FC = () => {
 };
 
 // --- STRENGTHS & WEAKNESSES ---
-export const StrengthsDiagram: React.FC = () => {
+export const StrengthsDiagram: React.FC<StrengthsProps> = ({ onClick }) => {
     const [view, setView] = useState<'pros' | 'cons'>('pros');
     
     const data = {
         pros: [
-            { title: "Açık Kaynak & Lisanssız", val: 95, icon: CheckCircle },
-            { title: "Akademik DNA (Vakıf)", val: 90, icon: Book },
-            { title: "Tam Özelleştirme (Kod)", val: 100, icon: Wrench },
-            { title: "Veri Güvenliği (Yerel)", val: 95, icon: Shield },
+            { id: 'strength-opensource', title: "Açık Kaynak & Lisanssız", val: 95, icon: CheckCircle },
+            { id: 'strength-academic', title: "Akademik DNA (Vakıf)", val: 90, icon: Book },
+            { id: 'strength-custom', title: "Tam Özelleştirme (Kod)", val: 100, icon: Wrench },
+            { id: 'strength-security', title: "Veri Güvenliği (Yerel)", val: 95, icon: Shield },
         ],
         cons: [
-            { title: "Kullanıcı Deneyimi (UX)", val: 60, icon: Smartphone },
-            { title: "TCO (Bakım Maliyeti)", val: 80, icon: DollarSign },
-            { title: "Mobil App (Native vs Web)", val: 50, icon: Smartphone },
-            { title: "Teknik Uzmanlık Gereği", val: 75, icon: Server },
+            { id: 'weak-ux', title: "Kullanıcı Deneyimi (UX)", val: 60, icon: Smartphone },
+            { id: 'weak-tco', title: "TCO (Bakım Maliyeti)", val: 80, icon: DollarSign },
+            { id: 'weak-mobile', title: "Mobil App (Native vs Web)", val: 50, icon: Smartphone },
+            { id: 'weak-tech', title: "Teknik Uzmanlık Gereği", val: 75, icon: Server },
         ]
     };
 
@@ -154,7 +158,7 @@ export const StrengthsDiagram: React.FC = () => {
             <div className="flex-1 min-w-[240px]">
                 <h3 className="font-serif text-xl mb-2 text-sakai-blue">Karşılaştırmalı Analiz</h3>
                 <p className="text-slate-500 text-sm mb-6 leading-relaxed">
-                    Sakai'nin kurumsal ihtiyaçlara göre avantaj ve dezavantajları.
+                    Sakai'nin kurumsal ihtiyaçlara göre avantaj ve dezavantajları. Detay için maddelere tıklayın.
                 </p>
                 
                 <div className="flex p-1 bg-slate-100 rounded-lg mb-6">
@@ -174,16 +178,21 @@ export const StrengthsDiagram: React.FC = () => {
 
                 <div className="space-y-4">
                     {data[view].map((item, idx) => (
-                        <div key={idx}>
-                             <div className="flex justify-between text-xs font-bold uppercase text-slate-500 mb-1">
-                                 <span className="flex items-center gap-2"><item.icon size={12}/> {item.title}</span>
+                        <div 
+                            key={idx} 
+                            className="group cursor-pointer"
+                            onClick={() => onClick && onClick(item.id)}
+                        >
+                             <div className="flex justify-between text-xs font-bold uppercase text-slate-500 mb-1 group-hover:text-sakai-blue transition-colors">
+                                 <span className="flex items-center gap-2"><item.icon size={14}/> {item.title}</span>
+                                 <Info size={12} className="opacity-0 group-hover:opacity-100" />
                              </div>
-                             <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+                             <div className="h-3 bg-slate-100 rounded-full overflow-hidden relative">
                                  <motion.div 
                                     initial={{ width: 0 }}
                                     animate={{ width: `${item.val}%` }}
                                     transition={{ delay: idx * 0.1, duration: 0.8 }}
-                                    className={`h-full rounded-full ${view === 'pros' ? 'bg-green-500' : 'bg-red-400'}`}
+                                    className={`h-full rounded-full ${view === 'pros' ? 'bg-green-500 group-hover:bg-green-600' : 'bg-red-400 group-hover:bg-red-500'}`}
                                  />
                              </div>
                         </div>
