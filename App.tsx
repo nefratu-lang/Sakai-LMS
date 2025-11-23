@@ -322,6 +322,26 @@ const App: React.FC = () => {
                       <li><strong>Akran Değerlendirme (Peer Review):</strong> Öğrencilerin birbirlerinin ödevlerini (anonim veya açık) değerlendirmesine olanak tanır.</li>
                       <li><strong>Inline Grading:</strong> Eğitmenler Word/PDF dosyalarını indirmeden tarayıcı üzerinde notlandırabilir.</li>
                   </ul>
+
+                  {/* VIDEO SECTION FOR ASSIGNMENTS */}
+                  <div className="my-6">
+                      <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
+                         <PlayCircle size={18} className="text-sakai-blue"/> 
+                         Canlı Önizleme: Ödevler
+                      </div>
+                      <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm relative aspect-video bg-slate-100 group">
+                          <video 
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-full h-full object-cover"
+                          >
+                              <source src="/videos/assignments-demo.mp4" type="video/mp4" />
+                              Tarayıcınız video etiketini desteklemiyor.
+                          </video>
+                      </div>
+                  </div>
               </>
           )
       },
@@ -339,6 +359,26 @@ const App: React.FC = () => {
                       <li><strong>Soru Tipleri:</strong> Çoktan seçmeli, Doğru/Yanlış, Eşleştirme, Boşluk Doldurma, Sesli Yanıt, Hot Spot (Resim işaretleme) ve Hesaplamalı sorular.</li>
                       <li><strong>Soru Havuzları:</strong> Sorular havuzlarda saklanır ve her öğrenciye havuzdan rastgele soru çekilerek kopya riski azaltılır.</li>
                   </ul>
+
+                  {/* VIDEO SECTION FOR TESTS */}
+                  <div className="my-6">
+                      <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
+                         <PlayCircle size={18} className="text-sakai-blue"/> 
+                         Canlı Önizleme: Sınav Oluşturma
+                      </div>
+                      <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm relative aspect-video bg-slate-100 group">
+                          <video 
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-full h-full object-cover"
+                          >
+                              <source src="/videos/tests-demo.mp4" type="video/mp4" />
+                              Tarayıcınız video etiketini desteklemiyor.
+                          </video>
+                      </div>
+                  </div>
               </>
           )
       },
@@ -355,6 +395,26 @@ const App: React.FC = () => {
                       <li><strong>İstatistikler:</strong> Hangi öğrenci kaç mesaj attı, kaçını okudu raporlanabilir.</li>
                       <li><strong>Conversations:</strong> Sakai 23+ sürümlerinde gelen yeni özellik, sosyal medya tarzı hızlı ve modern bir tartışma akışı sunar.</li>
                   </ul>
+
+                  {/* VIDEO SECTION FOR FORUM */}
+                  <div className="my-6">
+                      <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
+                         <PlayCircle size={18} className="text-sakai-blue"/> 
+                         Canlı Önizleme: Tartışma Forumları
+                      </div>
+                      <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm relative aspect-video bg-slate-100 group">
+                          <video 
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-full h-full object-cover"
+                          >
+                              <source src="/videos/forum-demo.mp4" type="video/mp4" />
+                              Tarayıcınız video etiketini desteklemiyor.
+                          </video>
+                      </div>
+                  </div>
               </>
           )
       },
@@ -371,6 +431,26 @@ const App: React.FC = () => {
                       <li><strong>Rubrikler (Rubrics):</strong> Dereceli puanlama anahtarları oluşturularak şeffaf ve adil notlandırma sağlanır. Öğrenci puanının nereden kırıldığını görür.</li>
                       <li><strong>İçe/Dışa Aktarım:</strong> Excel dosyalarıyla toplu not girişi veya yedeği alınabilir.</li>
                   </ul>
+
+                  {/* VIDEO SECTION FOR GRADEBOOK */}
+                  <div className="my-6">
+                      <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
+                         <PlayCircle size={18} className="text-sakai-blue"/> 
+                         Canlı Önizleme: Not Defteri
+                      </div>
+                      <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm relative aspect-video bg-slate-100 group">
+                          <video 
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-full h-full object-cover"
+                          >
+                              <source src="/videos/gradebook-demo.mp4" type="video/mp4" />
+                              Tarayıcınız video etiketini desteklemiyor.
+                          </video>
+                      </div>
+                  </div>
               </>
           )
       },
@@ -387,6 +467,26 @@ const App: React.FC = () => {
                       <li><strong>Telif Hakkı Yönetimi:</strong> Yüklenen materyallerin telif durumu (Copyright status) işaretlenebilir.</li>
                       <li><strong>HTML Sayfalar:</strong> Sadece dosya değil, doğrudan tarayıcıda açılan HTML sayfalar oluşturulabilir.</li>
                   </ul>
+
+                  {/* VIDEO SECTION FOR RESOURCES */}
+                  <div className="my-6">
+                      <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
+                         <PlayCircle size={18} className="text-sakai-blue"/> 
+                         Canlı Önizleme: Kaynak Yönetimi
+                      </div>
+                      <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm relative aspect-video bg-slate-100 group">
+                          <video 
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-full h-full object-cover"
+                          >
+                              <source src="/videos/resources-demo.mp4" type="video/mp4" />
+                              Tarayıcınız video etiketini desteklemiyor.
+                          </video>
+                      </div>
+                  </div>
               </>
           )
       }
