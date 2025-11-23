@@ -9,7 +9,7 @@ import { HeroScene, NetworkScene } from './components/QuantumScene';
 import { SakaiModulesDiagram, LTIIntegrationDiagram, StrengthsDiagram } from './components/Diagrams';
 import { SakaiVsCanvas } from './components/SakaiVsCanvas';
 import { SakaiWalkthrough } from './components/SakaiWalkthrough';
-import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay, ExternalLink, Lightbulb, PenTool, DollarSign, ChevronRight, Info, ArrowRight, FileCheck, CheckCircle, Globe, Wrench, Smartphone, Server } from 'lucide-react';
+import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay, ExternalLink, Lightbulb, PenTool, DollarSign, ChevronRight, Info, ArrowRight, FileCheck, CheckCircle, Globe, Wrench, Smartphone, Server, PlayCircle } from 'lucide-react';
 
 // --- Types ---
 interface FeatureDetail {
@@ -232,6 +232,27 @@ const App: React.FC = () => {
                       <strong>Site Editor</strong> aracı, site yapısını ve kullanıcıları yönetmek için merkezi bir kontrol panelidir.
                       Tek tek kayıt yapmak yerine, CSV dosyalarıyla binlerce kullanıcı saniyeler içinde sisteme yüklenebilir.
                   </p>
+
+                  {/* VIDEO DEMO SECTION */}
+                  <div className="my-6">
+                      <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
+                         <PlayCircle size={18} className="text-sakai-blue"/> 
+                         Video: CSV ile Toplu Kullanıcı Ekleme
+                      </div>
+                      <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm relative aspect-video bg-slate-100 group">
+                          <video 
+                              controls 
+                              playsInline
+                              className="w-full h-full object-cover"
+                          >
+                              <source src="/videos/csv-upload.mp4" type="video/mp4" />
+                              Tarayıcınız video etiketini desteklemiyor.
+                          </video>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-1 italic text-center">
+                          Simülasyon: Kullanıcı verilerinin toplu içe aktarılması.
+                      </p>
+                  </div>
                   
                   <div className="p-3 bg-green-50 text-green-800 rounded border border-green-200 text-sm">
                       <strong>Sonuç:</strong> Eğitmenin "öğrenci ekleme" yükü ortadan kalkar, sistem tamamen otomatik işler.
