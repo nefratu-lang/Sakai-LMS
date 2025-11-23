@@ -183,6 +183,29 @@ const App: React.FC = () => {
                       <li><strong>Üniversiteler & Kolejler:</strong> Kampüs geneli öğrenme yönetimi.</li>
                       <li><strong>Araştırma Grupları:</strong> Ortak çalışma ve dosya paylaşım alanları (Project Sites).</li>
                   </ul>
+
+                  {/* VIDEO DEMO SECTION */}
+                  <div className="my-6">
+                      <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
+                         <PlayCircle size={18} className="text-sakai-blue"/> 
+                         Video: Kampüs Odaklı Yapı
+                      </div>
+                      <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm relative aspect-video bg-slate-100 group">
+                          <video 
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-full h-full object-cover"
+                          >
+                              <source src="/videos/target-demo.mp4" type="video/mp4" />
+                              Tarayıcınız video etiketini desteklemiyor.
+                          </video>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-1 italic text-center">
+                          Simülasyon: Akademik ihtiyaçlara göre özelleştirilmiş yapı.
+                      </p>
+                  </div>
               </>
           )
       },
@@ -211,6 +234,29 @@ const App: React.FC = () => {
 
                   <h4>Kimlik Doğrulama (SSO)</h4>
                   <p>LDAP, Active Directory ve CAS/Shibboleth desteği ile kurumun mevcut şifreleriyle giriş yapılır.</p>
+
+                  {/* VIDEO DEMO SECTION */}
+                  <div className="my-6">
+                      <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
+                         <PlayCircle size={18} className="text-sakai-blue"/> 
+                         Video: Rol ve Yetki Ayarları
+                      </div>
+                      <div className="rounded-lg overflow-hidden border border-slate-200 shadow-sm relative aspect-video bg-slate-100 group">
+                          <video 
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-full h-full object-cover"
+                          >
+                              <source src="/videos/roles-demo.mp4" type="video/mp4" />
+                              Tarayıcınız video etiketini desteklemiyor.
+                          </video>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-1 italic text-center">
+                          Simülasyon: Realm üzerinden detaylı yetki ataması.
+                      </p>
+                  </div>
               </>
           )
       },
