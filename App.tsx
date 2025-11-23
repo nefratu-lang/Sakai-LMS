@@ -9,7 +9,7 @@ import { HeroScene, NetworkScene } from './components/QuantumScene';
 import { SakaiModulesDiagram, LTIIntegrationDiagram, StrengthsDiagram } from './components/Diagrams';
 import { SakaiVsCanvas } from './components/SakaiVsCanvas';
 import { SakaiWalkthrough } from './components/SakaiWalkthrough';
-import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay, ExternalLink, Lightbulb, PenTool, DollarSign, ChevronRight, Info, ArrowRight, FileCheck, CheckCircle, Globe } from 'lucide-react';
+import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay, ExternalLink, Lightbulb, PenTool, DollarSign, ChevronRight, Info, ArrowRight, FileCheck, CheckCircle, Globe, Wrench, Smartphone, Server } from 'lucide-react';
 
 // --- Types ---
 interface FeatureDetail {
@@ -346,6 +346,121 @@ const App: React.FC = () => {
       }
   };
 
+  // 3. Detailed Strengths & Weaknesses Data
+  const strengthDetails: Record<string, FeatureDetail> = {
+      'strength-opensource': {
+          id: 'strength-opensource',
+          title: "Açık Kaynak & Topluluk Gücü",
+          icon: CheckCircle,
+          fullDesc: (
+              <>
+                  <p>Sakai, ticari bir "Kara Kutu" değildir. Kaynak kodları tamamen açıktır ve Apereo Vakfı lisansı altında ücretsiz dağıtılır.</p>
+                  <h4>Avantajları:</h4>
+                  <ul>
+                      <li><strong>Vendor Lock-in Yok:</strong> Bir şirkete bağımlı kalmazsınız. Yarın Instructure (Canvas) fiyatları %500 artırsa yapacak bir şeyiniz yoktur, ancak Sakai'de kodlar sizindir.</li>
+                      <li><strong>Sürdürülebilirlik:</strong> Yazılımın geleceği bir şirketin kar marjına değil, küresel üniversite konsorsiyumunun ihtiyaçlarına bağlıdır.</li>
+                      <li><strong>İnovasyon:</strong> Dünyanın en iyi üniversiteleri (Oxford, NYU, Duke) kendi geliştirdikleri özellikleri ana koda ekler.</li>
+                  </ul>
+              </>
+          )
+      },
+      'strength-academic': {
+          id: 'strength-academic',
+          title: "Akademik DNA",
+          icon: BookOpen,
+          fullDesc: (
+              <>
+                  <p>Sakai, mühendisler tarafından değil, <strong>akademisyenler ve üniversiteler</strong> tarafından geliştirilmiştir. Bu, sistemin her hücresine işlemiştir.</p>
+                  <h4>Neden Önemli?</h4>
+                  <ul>
+                      <li><strong>Özel İhtiyaçlar:</strong> Ticari LMS'lerin "gereksiz karmaşık" bulduğu özellikler (örn. çok detaylı yetki yönetimi, karmaşık not ağırlıklandırma), üniversiteler için hayati önem taşır ve Sakai'de standarttır.</li>
+                      <li><strong>Araştırma Odaklılık:</strong> Sakai sadece ders (Course) için değil, Araştırma Projeleri (Project Sites) için de kullanılır. Bu özellik rakiplerde zayıftır.</li>
+                  </ul>
+              </>
+          )
+      },
+      'strength-custom': {
+          id: 'strength-custom',
+          title: "Tam Özelleştirme (Kod Erişimi)",
+          icon: Wrench,
+          fullDesc: (
+              <>
+                  <p>Ticari bir LMS'te sadece "Logoyu" ve "Renkleri" değiştirebilirsiniz. Sakai'de ise <strong>her şeyi</strong> değiştirebilirsiniz.</p>
+                  <h4>Örnekler:</h4>
+                  <ul>
+                      <li><strong>Yeni Araç Yazma:</strong> Üniversitenize özel bir "Staj Takip Modülü" mü lazım? Yazıp sisteme gömebilirsiniz.</li>
+                      <li><strong>Entegrasyon:</strong> Kurumun kendi yazdığı eski bir veritabanı sistemiyle konuşması mı gerekiyor? API yazarak bağlayabilirsiniz.</li>
+                  </ul>
+              </>
+          )
+      },
+      'strength-security': {
+          id: 'strength-security',
+          title: "Veri Güvenliği & Yerel Barındırma",
+          icon: Shield,
+          fullDesc: (
+              <>
+                  <p>Bulut tabanlı (SaaS) sistemlerde verileriniz şirketin sunucularındadır (genelde ABD veya Avrupa). Sakai'de ise veriler <strong>kendi kampüsünüzdeki sunucularda</strong> (On-Premise) durur.</p>
+                  <h4>Kritik Avantajlar:</h4>
+                  <ul>
+                      <li><strong>KVKK & GDPR:</strong> Öğrenci verilerinin ülke dışına çıkmaması gerekiyorsa Sakai en güvenli limandır.</li>
+                      <li><strong>Tam Kontrol:</strong> Veritabanına doğrudan erişiminiz vardır. İstediğiniz SQL sorgusunu atıp özel raporlar alabilirsiniz. Ticari sistemlerde bu imkansızdır.</li>
+                  </ul>
+              </>
+          )
+      },
+      'weak-ux': {
+          id: 'weak-ux',
+          title: "Kullanıcı Deneyimi (UX)",
+          icon: Smartphone,
+          fullDesc: (
+              <>
+                  <p>Sakai'nin arayüzü, modern rakiplerine (Canvas, Brightspace) göre daha "geleneksel" ve "araç odaklı" kalabilir.</p>
+                  <ul>
+                      <li><strong>Öğrenme Eğrisi:</strong> Eğitmenlerin sisteme alışması biraz daha zaman alabilir. Menüler yoğundur.</li>
+                      <li><strong>Görsellik:</strong> "Sürükle-Bırak" özellikleri veya minimalist tasarım konusunda ticari rakipler daha ileridedir.</li>
+                  </ul>
+              </>
+          )
+      },
+      'weak-tco': {
+          id: 'weak-tco',
+          title: "TCO (Bakım Maliyeti)",
+          icon: DollarSign,
+          fullDesc: (
+              <>
+                  <p><strong>"Bedava Yavru Köpek" (Free Puppy) Metaforu:</strong> Yazılımı almak bedavadır ama onu "beslemek" masraflıdır.</p>
+                  <ul>
+                      <li><strong>IT Ekibi:</strong> Sunucuyu yönetecek, güncellemeleri yapacak yetkin Linux/Java uzmanlarına maaş ödemeniz gerekir.</li>
+                      <li><strong>Donanım:</strong> Kendi sunucularınızı satın almalı ve elektriğini/soğutmasını karşılamalısınız.</li>
+                  </ul>
+              </>
+          )
+      },
+      'weak-mobile': {
+          id: 'weak-mobile',
+          title: "Mobil Uygulama",
+          icon: Smartphone,
+          fullDesc: (
+              <>
+                  <p>Canvas veya Blackboard'un milyonlarca dolarlık bütçeyle geliştirdiği "Native" (Mağazadan indirilen) mobil uygulamaları çok gelişmiştir.</p>
+                  <p>Sakai'nin resmi bir mobil uygulaması yoktur. Bunun yerine <strong>"Responsive Web Design"</strong> kullanır. Yani telefondan tarayıcı ile girildiğinde site mobile uyumlu hale gelir. İş görür, ancak "Native App" akıcılığını vermez.</p>
+              </>
+          )
+      },
+      'weak-tech': {
+          id: 'weak-tech',
+          title: "Teknik Uzmanlık Gereksinimi",
+          icon: Server,
+          fullDesc: (
+              <>
+                  <p>Sakai "Tak-Çalıştır" bir sistem değildir. Kurulumu ve konfigürasyonu karmaşıktır.</p>
+                  <p>Küçük bir kolej veya teknik ekibi olmayan bir okul için Sakai'yi yönetmek çok zor olabilir. Bu kurumlar için Sakai'nin "Bulut Partnerleri" (Longsight gibi) devreye girer.</p>
+              </>
+          )
+      }
+  };
+
   const ltiFeatureDetail: FeatureDetail = {
       id: 'lti-deep',
       title: "LTI ve Entegrasyon Mimarisi",
@@ -371,6 +486,12 @@ const App: React.FC = () => {
   const handleModuleClick = (index: number) => {
       if (moduleDetails[index]) {
           setSelectedFeature(moduleDetails[index]);
+      }
+  };
+
+  const handleStrengthClick = (id: string) => {
+      if (strengthDetails[id]) {
+          setSelectedFeature(strengthDetails[id]);
       }
   };
 
@@ -609,31 +730,10 @@ const App: React.FC = () => {
                      <p className="text-slate-500">Objektif bir bakış açısıyla sistemin artıları ve eksileri.</p>
                 </div>
                 
-                <StrengthsDiagram />
+                <StrengthsDiagram onClick={handleStrengthClick} />
                 
                 <div className="mt-8 max-w-3xl mx-auto p-6 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:border-sakai-blue hover:shadow-md transition-all"
-                     onClick={() => setSelectedFeature({
-                         id: 'tco',
-                         title: "Maliyet (TCO) & 'Bedava Yavru Köpek'",
-                         icon: DollarSign,
-                         fullDesc: (
-                             <>
-                                 <h4>TCO (Toplam Sahip Olma Maliyeti) Nedir?</h4>
-                                 <p>Sakai açık kaynak kodlu ve lisanssızdır. Ancak bu "masrafsız" olduğu anlamına gelmez.</p>
-                                 
-                                 <h4>'Free Puppy' (Bedava Yavru Köpek) Metaforu</h4>
-                                 <p>Literatürde bu durum şöyle açıklanır: "Bir arkadaşınız size bedava bir yavru köpek verebilir. Köpeği almak için para ödemezsiniz (Lisans Ücreti Yok). Ancak o köpeği beslemek, aşılarını yaptırmak, eğitmek ve barındırmak için sürekli para harcarsınız."</p>
-                                 
-                                 <h4>Sakai'nin Gider Kalemleri:</h4>
-                                 <ul>
-                                     <li><strong>Sunucu Barındırma:</strong> Yüksek trafikli bir üniversite için güçlü sunucular gerekir.</li>
-                                     <li><strong>Teknik Personel:</strong> Sistemi yönetecek, güncelleyecek ve yedekleyecek kalifiye IT ekibi şarttır.</li>
-                                     <li><strong>Eğitim:</strong> Eğitmenlerin sisteme adaptasyonu için eğitim bütçesi ayrılmalıdır.</li>
-                                 </ul>
-                                 <p>Buna rağmen, Blackboard veya Canvas gibi ticari rakiplerin yıllık lisans ücretlerine kıyasla Sakai'nin TCO'su genellikle daha düşüktür.</p>
-                             </>
-                         )
-                     })}
+                     onClick={() => handleStrengthClick('weak-tco')}
                 >
                      <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
                         <DollarSign size={18} className="text-red-500"/>
