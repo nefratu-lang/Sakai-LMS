@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Layout, Users, FileCheck, Plug, ChevronRight, Info, Shield, ExternalLink, AlertTriangle } from 'lucide-react';
+import { Layout, Users, FileCheck, Plug, ChevronRight, Info, Shield, ExternalLink, CheckCircle } from 'lucide-react';
 
 export const SakaiWalkthrough: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -106,19 +106,19 @@ export const SakaiWalkthrough: React.FC = () => {
       <div className="lg:w-1/3 flex flex-col gap-2">
         <div className="mb-6">
              <h3 className="font-serif text-2xl text-slate-900">Sakai Arayüz Simülasyonu</h3>
-             <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+             <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg shadow-sm">
                 <div className="flex items-start gap-2 mb-3">
-                    <AlertTriangle className="text-amber-600 shrink-0" size={18} />
-                    <p className="text-xs text-amber-800 leading-relaxed">
-                        <strong>Sunucu Durumu:</strong> Bakım Modu.<br/>
-                        Aşağıdaki canlı sunucu şu an bakımdadır, ancak simülasyon üzerinden tüm fonksiyonları inceleyebilirsiniz.
+                    <CheckCircle className="text-green-600 shrink-0" size={20} />
+                    <p className="text-xs text-green-900 leading-relaxed">
+                        <strong>Sunucu Durumu: Aktif</strong><br/>
+                        Aşağıdaki canlı sunucu şu an aktiftir, simülasyon üzerinden tüm fonksiyonları inceleyebilirsiniz.
                     </p>
                 </div>
                 <a 
                     href="https://trysakai.longsight.com/portal/site/6bab8ed5-8859-40f4-8d8a-f50f9da06975" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold uppercase rounded transition-colors"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold uppercase rounded transition-colors shadow-md shadow-green-200"
                 >
                     <ExternalLink size={14} /> Cloud Server'a Git
                 </a>
