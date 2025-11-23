@@ -9,27 +9,117 @@ import { HeroScene, NetworkScene } from './components/QuantumScene';
 import { SakaiModulesDiagram, LTIIntegrationDiagram, StrengthsDiagram } from './components/Diagrams';
 import { SakaiVsCanvas } from './components/SakaiVsCanvas';
 import { SakaiWalkthrough } from './components/SakaiWalkthrough';
-import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay, ExternalLink, Lightbulb, PenTool, DollarSign } from 'lucide-react';
+import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay, ExternalLink, Lightbulb, PenTool, DollarSign, ChevronRight, Info, ArrowRight, FileCheck, CheckCircle, Globe } from 'lucide-react';
 
-const FeatureCard = ({ title, desc, icon: Icon, delay }: { title: string, desc: string, icon: any, delay: string }) => {
+// --- Types ---
+interface FeatureDetail {
+    id: string;
+    title: string;
+    icon: any;
+    shortDesc?: string;
+    fullDesc: React.ReactNode;
+}
+
+interface FeatureCardProps {
+    feature: FeatureDetail;
+    onClick: () => void;
+    delay: string;
+}
+
+interface SidePanelProps {
+    feature: FeatureDetail | null;
+    onClose: () => void;
+}
+
+// --- Components ---
+
+const FeatureCard: React.FC<FeatureCardProps> = ({ feature, onClick, delay }) => {
+  const Icon = feature.icon;
   return (
-    <div className="flex flex-col group animate-fade-in-up items-start p-8 bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 w-full hover:border-sakai-blue/50" style={{ animationDelay: delay }}>
+    <button 
+        onClick={onClick}
+        className="flex flex-col group animate-fade-in-up items-start p-8 bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 w-full hover:border-sakai-blue/50 text-left relative overflow-hidden" 
+        style={{ animationDelay: delay }}
+    >
+      <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity text-sakai-blue text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+          Detay <ArrowRight size={14} />
+      </div>
       <div className="p-3 bg-slate-50 rounded-lg mb-4 text-sakai-blue group-hover:bg-sakai-blue group-hover:text-white transition-colors">
         <Icon size={24} />
       </div>
-      <h3 className="font-serif text-xl text-slate-900 mb-3">{title}</h3>
-      <p className="text-sm text-slate-600 leading-relaxed">{desc}</p>
-    </div>
+      <h3 className="font-serif text-xl text-slate-900 mb-3">{feature.title}</h3>
+      <p className="text-sm text-slate-600 leading-relaxed">{feature.shortDesc}</p>
+    </button>
   );
 };
 
-// New Component for Presentation Cues based on PDF "Tips"
+// SLIDING SIDE PANEL (DRAWER)
+const SidePanel: React.FC<SidePanelProps> = ({ feature, onClose }) => {
+    const isOpen = !!feature;
+    
+    // Close on escape key
+    useEffect(() => {
+        const handleEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+        window.addEventListener('keydown', handleEsc);
+        return () => window.removeEventListener('keydown', handleEsc);
+    }, [onClose]);
+
+    return (
+        <>
+            {/* Backdrop */}
+            <div 
+                className={`fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                onClick={onClose}
+            />
+
+            {/* Sliding Panel */}
+            <div className={`fixed top-0 right-0 h-full w-full md:w-[600px] bg-white z-[70] shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                
+                {feature && (
+                    <>
+                        {/* Header */}
+                        <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-sakai-blue/10 text-sakai-blue rounded-xl shadow-inner">
+                                    <feature.icon size={28} />
+                                </div>
+                                <div>
+                                    <h3 className="font-serif text-2xl text-slate-900 font-bold leading-tight">{feature.title}</h3>
+                                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Detaylı İnceleme</span>
+                                </div>
+                            </div>
+                            <button onClick={onClose} className="p-2 hover:bg-slate-200 rounded-full text-slate-500 transition-colors">
+                                <X size={24} />
+                            </button>
+                        </div>
+
+                        {/* Scrollable Content */}
+                        <div className="flex-1 overflow-y-auto p-8 bg-white">
+                             <div className="prose prose-slate max-w-none prose-headings:font-serif prose-headings:text-sakai-blue prose-p:text-slate-700 prose-p:leading-relaxed prose-li:text-slate-700 prose-strong:text-slate-900">
+                                 {feature.fullDesc}
+                             </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="p-6 border-t border-slate-100 bg-slate-50 flex justify-end">
+                            <button onClick={onClose} className="px-8 py-3 bg-sakai-blue text-white rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2">
+                                <CheckCircle size={18} /> Okudum, Kapat
+                            </button>
+                        </div>
+                    </>
+                )}
+            </div>
+        </>
+    );
+};
+
+// Component for highlighting key academic points
 const SpeakerNote = ({ title, text }: { title: string, text: string }) => (
     <div className="mt-6 p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-lg flex gap-4 items-start shadow-sm">
         <Lightbulb className="text-amber-600 shrink-0 mt-1" size={20} />
         <div>
             <h4 className="text-xs font-bold text-amber-700 uppercase tracking-widest mb-1">{title}</h4>
-            <p className="text-sm text-slate-700 italic">"{text}"</p>
+            <p className="text-sm text-slate-700 font-medium leading-relaxed">{text}</p>
         </div>
     </div>
 );
@@ -37,6 +127,7 @@ const SpeakerNote = ({ title, text }: { title: string, text: string }) => (
 const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState<FeatureDetail | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -60,6 +151,229 @@ const App: React.FC = () => {
     }
   };
 
+  // --- DATA: Deep Content from PDF Report ---
+  
+  // 1. Introduction Cards Data
+  const introFeatures: FeatureDetail[] = [
+      {
+          id: 'target',
+          title: "Hedef Kitle & Amaç",
+          icon: School,
+          shortDesc: "Doğrudan Yüksek Öğretim (Üniversiteler) ve Akademik Araştırma Toplulukları için tasarım.",
+          fullDesc: (
+              <>
+                  <div className="p-4 bg-blue-50 border-l-4 border-sakai-blue rounded mb-6 text-sm text-blue-900 italic">
+                      "Sakai, genel geçer bir eğitim yazılımı değildir. Doğrudan akademik ihtiyaçlar gözetilerek tasarlanmıştır."
+                  </div>
+                  
+                  <h4>Akademik Dil ve Yapı</h4>
+                  <p>
+                      Sakai, akademik dünyanın dilinden anlayan bir sistemdir. Ticari LMS'lerin aksine, sadece ders anlatımı için değil; 
+                      üniversitelerdeki komite çalışmaları, araştırma projeleri ve idari işbirlikleri için özel olarak kurgulanmıştır.
+                  </p>
+                  
+                  <h4>Ölçeklenebilir Mimari</h4>
+                  <p>
+                      Dünya genelinde yüzlerce üniversite tarafından kullanılan sistem, yüz binlerce kullanıcıyı aynı anda destekleyebilecek 
+                      güvenilir ve ölçeklenebilir bir Java tabanlı mimariye sahiptir.
+                  </p>
+
+                  <h4>Kimler İçin?</h4>
+                  <ul>
+                      <li><strong>Üniversiteler & Kolejler:</strong> Kampüs geneli öğrenme yönetimi.</li>
+                      <li><strong>Araştırma Grupları:</strong> Ortak çalışma ve dosya paylaşım alanları (Project Sites).</li>
+                  </ul>
+              </>
+          )
+      },
+      {
+          id: 'roles',
+          title: "Roller & Realms",
+          icon: Users,
+          shortDesc: "Esnek 'Realm' yapısı ile her dersin ihtiyacına göre yetkiler (Maintainer, Participant) özelleştirilebilir.",
+          fullDesc: (
+              <>
+                  <h4>Rol Matrisi: Realms</h4>
+                  <p>
+                      Sakai'de yetki yönetimi <strong>"Realm"</strong> adı verilen alanlarla yapılır. Sistem varsayılan olarak şu rolleri sunar:
+                  </p>
+                  <ul>
+                      <li><strong>Instructor (Maintainer/Site Owner):</strong> Tam yetkili eğitmen. İçerik düzenler, not verir, siteyi yayınlar.</li>
+                      <li><strong>Student (Participant):</strong> İçeriği görüntüler, ödev yükler, tartışmalara katılır.</li>
+                      <li><strong>Teaching Assistant (TA):</strong> Eğitmenin belirlediği kısıtlı yetkilere (örn. sadece notlandırma) sahiptir.</li>
+                  </ul>
+
+                  <h4>Esneklik: "Bu rollerle sınırlı değilsiniz"</h4>
+                  <p>
+                      Sakai'nin en büyük gücü, bu rolleri <strong>Site Editor</strong> aracıyla en ince ayrıntısına kadar özelleştirebilmesidir.
+                      Örneğin; bir asistana sadece "Ödev Okuma" yetkisi verip, "Sınav Hazırlama" yetkisini kısıtlayabilirsiniz.
+                  </p>
+
+                  <h4>Kimlik Doğrulama (SSO)</h4>
+                  <p>LDAP, Active Directory ve CAS/Shibboleth desteği ile kurumun mevcut şifreleriyle giriş yapılır.</p>
+              </>
+          )
+      },
+      {
+          id: 'automation',
+          title: "Otomasyon & ÖBS",
+          icon: Layers,
+          shortDesc: "Öğrenci Bilgi Sistemleri (ÖBS) ile entegre çalışır. Kullanıcı yönetimi için Site Editor kullanılır.",
+          fullDesc: (
+              <>
+                  <h4>Entegre Kayıt Modelleri</h4>
+                  <p>
+                      Sakai, <strong>Öğrenci Bilgi Sistemleri (ÖBS)</strong> ile gerçek zamanlı konuşabilir.
+                      Öğrenci, dönem başında ders kaydını yaptığı an, entegrasyon sayesinde Sakai'deki dersine de otomatik olarak atanır.
+                  </p>
+
+                  <h4>Site Editor & Toplu İşlemler</h4>
+                  <p>
+                      <strong>Site Editor</strong> aracı, site yapısını ve kullanıcıları yönetmek için merkezi bir kontrol panelidir.
+                      Tek tek kayıt yapmak yerine, CSV dosyalarıyla binlerce kullanıcı saniyeler içinde sisteme yüklenebilir.
+                  </p>
+                  
+                  <div className="p-3 bg-green-50 text-green-800 rounded border border-green-200 text-sm">
+                      <strong>Sonuç:</strong> Eğitmenin "öğrenci ekleme" yükü ortadan kalkar, sistem tamamen otomatik işler.
+                  </div>
+              </>
+          )
+      }
+  ];
+
+  // 2. Module Details Data (For Diagram Clicks)
+  const moduleDetails: Record<number, FeatureDetail> = {
+      0: {
+          id: 'lessons',
+          title: "Lessons (Ders Oluşturucu)",
+          icon: BookOpen,
+          fullDesc: (
+              <>
+                  <p><strong>Ders Oluşturma Aracı (Lesson Builder)</strong>, Sakai'nin en güçlü pedagojik aracıdır. Eğitmenlerin içeriği modüler sayfalar halinde yapılandırmasını sağlar.</p>
+                  
+                  <h4>Öne Çıkan Özellikler:</h4>
+                  <ul>
+                      <li><strong>Sıralı Öğrenme (Scaffolding):</strong> İçerikleri belirli bir sıraya koyarak öğrencinin adım adım ilerlemesini sağlar. "Bu videoyu izlemeden teste giremezsin" kuralı konulabilir (Prerequisite).</li>
+                      <li><strong>Şartlı Erişim (Conditional Release):</strong> Belirli bir başarı notunu almayan öğrenciye sonraki modül açılmaz.</li>
+                      <li><strong>Çoklu Ortam Desteği:</strong> Metin, video, dosya, test ve ödevler tek bir sayfada iç içe (embedded) sunulabilir.</li>
+                  </ul>
+                  <p>Sakai 11 ve sonrası sürümlerde "Morpheus" arayüzü ile tamamen mobil uyumlu hale gelmiştir.</p>
+              </>
+          )
+      },
+      1: {
+          id: 'assignments',
+          title: "Ödevler (Assignments)",
+          icon: FileText,
+          fullDesc: (
+              <>
+                  <p>Ödevler aracı, öğrenci teslimatlarını yönetmek için kapsamlı bir çözüm sunar. Sadece dosya yükleme değil, doğrudan metin girişi de destekler.</p>
+                  
+                  <h4>Teknik Detaylar:</h4>
+                  <ul>
+                      <li><strong>Drop Box:</strong> Her öğrencinin eğitmenle özel dosya paylaşabileceği kişisel klasör yapısı sunar.</li>
+                      <li><strong>Turnitin Entegrasyonu:</strong> Öğrenci ödevini yüklediği anda, sistem arka planda Turnitin (veya benzeri) intihal servisine bağlanır ve benzerlik raporunu çeker.</li>
+                      <li><strong>Akran Değerlendirme (Peer Review):</strong> Öğrencilerin birbirlerinin ödevlerini (anonim veya açık) değerlendirmesine olanak tanır.</li>
+                      <li><strong>Inline Grading:</strong> Eğitmenler Word/PDF dosyalarını indirmeden tarayıcı üzerinde notlandırabilir.</li>
+                  </ul>
+              </>
+          )
+      },
+      2: {
+          id: 'tests',
+          title: "Sınav ve Quizler",
+          icon: PenTool,
+          fullDesc: (
+              <>
+                  <p>Tests & Quizzes aracı, Sakai'nin en karmaşık ve güçlü modülüdür. Basit anketlerden, yüksek güvenlikli final sınavlarına kadar her şeyi yönetir.</p>
+                  
+                  <h4>Gelişmiş Özellikler:</h4>
+                  <ul>
+                      <li><strong>Madde Analizi (Item Analysis):</strong> Sınav sonrası her sorunun ayırt edicilik ve güçlük indeksini raporlar. Hangi sorunun "kötü" veya "çok zor" olduğunu istatistiksel olarak gösterir.</li>
+                      <li><strong>Soru Tipleri:</strong> Çoktan seçmeli, Doğru/Yanlış, Eşleştirme, Boşluk Doldurma, Sesli Yanıt, Hot Spot (Resim işaretleme) ve Hesaplamalı sorular.</li>
+                      <li><strong>Soru Havuzları:</strong> Sorular havuzlarda saklanır ve her öğrenciye havuzdan rastgele soru çekilerek kopya riski azaltılır.</li>
+                  </ul>
+              </>
+          )
+      },
+      3: {
+          id: 'forum',
+          title: "Forum & İletişim",
+          icon: MessageSquare,
+          fullDesc: (
+              <>
+                  <p>Akademik tartışmaların yürütüldüğü asenkron iletişim merkezidir. Konu bazlı (Threaded) tartışma yapısına sahiptir.</p>
+                  <h4>İşlevler:</h4>
+                  <ul>
+                      <li><strong>Puanlama:</strong> Eğitmen, öğrencinin foruma yazdığı cevabı doğrudan puanlayıp Not Defterine (Gradebook) gönderebilir.</li>
+                      <li><strong>İstatistikler:</strong> Hangi öğrenci kaç mesaj attı, kaçını okudu raporlanabilir.</li>
+                      <li><strong>Conversations:</strong> Sakai 23+ sürümlerinde gelen yeni özellik, sosyal medya tarzı hızlı ve modern bir tartışma akışı sunar.</li>
+                  </ul>
+              </>
+          )
+      },
+      4: {
+          id: 'gradebook',
+          title: "Not Defteri (Gradebook)",
+          icon: CheckCircle,
+          fullDesc: (
+              <>
+                  <p>Dersin tüm ölçme verilerinin toplandığı merkezi veri tabanıdır. Ödevlerden ve Sınavlardan gelen notlar buraya otomatik akar.</p>
+                  <h4>Özellikler:</h4>
+                  <ul>
+                      <li><strong>Ağırlıklı Puanlama:</strong> "Vize %30, Final %50, Ödev %20" gibi ağırlıklandırmalar yapılabilir.</li>
+                      <li><strong>Rubrikler (Rubrics):</strong> Dereceli puanlama anahtarları oluşturularak şeffaf ve adil notlandırma sağlanır. Öğrenci puanının nereden kırıldığını görür.</li>
+                      <li><strong>İçe/Dışa Aktarım:</strong> Excel dosyalarıyla toplu not girişi veya yedeği alınabilir.</li>
+                  </ul>
+              </>
+          )
+      },
+      5: {
+          id: 'resources',
+          title: "Kaynaklar (Resources)",
+          icon: BarChart2,
+          fullDesc: (
+              <>
+                  <p>Ders materyallerinin barındırıldığı dosya deposudur. WebDAV desteği sayesinde bilgisayarınızdaki bir klasör gibi yönetilebilir.</p>
+                  <h4>Detaylar:</h4>
+                  <ul>
+                      <li><strong>Erişim Kontrolü:</strong> Dosyaların görünürlük tarihleri ayarlanabilir (örn. "Sınavdan sonra görünsün").</li>
+                      <li><strong>Telif Hakkı Yönetimi:</strong> Yüklenen materyallerin telif durumu (Copyright status) işaretlenebilir.</li>
+                      <li><strong>HTML Sayfalar:</strong> Sadece dosya değil, doğrudan tarayıcıda açılan HTML sayfalar oluşturulabilir.</li>
+                  </ul>
+              </>
+          )
+      }
+  };
+
+  const ltiFeatureDetail: FeatureDetail = {
+      id: 'lti-deep',
+      title: "LTI ve Entegrasyon Mimarisi",
+      icon: Plug,
+      fullDesc: (
+          <>
+              <h4>Learning Tools Interoperability (LTI)</h4>
+              <p>Sakai, IMS Global'in LTI standardını en iyi uygulayan sistemlerden biridir. Bu standart, Sakai'nin "kapalı bir kutu" olmasını engeller ve onu bir "Entegrasyon Hub"ına dönüştürür.</p>
+              
+              <h4>Nasıl Çalışır?</h4>
+              <ol>
+                  <li><strong>Launch (Başlatma):</strong> Sakai, öğrencinin kimlik bilgilerini ve rolünü (Öğrenci/Eğitmen) şifreli bir paketle dış araca (örn. Zoom) gönderir.</li>
+                  <li><strong>Tool Processing:</strong> Dış araç bu kimliği doğrular ve kullanıcıya özel içeriği açar (Tekrar şifre girmeye gerek kalmaz).</li>
+                  <li><strong>Grade Passback (Not İadesi):</strong> LTI 1.3 Advantage standardı sayesinde, dış araçta yapılan bir sınavın notu, otomatik olarak Sakai Gradebook'a geri yazılır.</li>
+              </ol>
+              
+              <h4>Desteklenen Araçlar:</h4>
+              <p>Turnitin, Zoom, BigBlueButton, Gradescope, H5P, McGraw-Hill Connect ve yüzlerce diğer eğitim aracı.</p>
+          </>
+      )
+  };
+
+  const handleModuleClick = (index: number) => {
+      if (moduleDetails[index]) {
+          setSelectedFeature(moduleDetails[index]);
+      }
+  };
+
   return (
     <div className="min-h-screen bg-[#F0F4F8] text-slate-800 selection:bg-sakai-blue selection:text-white">
       
@@ -77,7 +391,7 @@ const App: React.FC = () => {
             <a href="#intro" onClick={scrollToSection('intro')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Tanıtım</a>
             <a href="#features" onClick={scrollToSection('features')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Bileşenler</a>
             <a href="#demo" onClick={scrollToSection('demo')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Demo</a>
-            <a href="#proscons" onClick={scrollToSection('proscons')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Artı/Eksi</a>
+            <a href="#proscons" onClick={scrollToSection('proscons')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Analiz</a>
             <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canvas</a>
             
             <a 
@@ -114,6 +428,9 @@ const App: React.FC = () => {
         </div>
       )}
 
+      {/* Sliding Side Panel */}
+      <SidePanel feature={selectedFeature} onClose={() => setSelectedFeature(null)} />
+
       {/* Hero Section */}
       <header className="relative h-screen flex items-center justify-center overflow-hidden">
         <HeroScene />
@@ -134,7 +451,7 @@ const App: React.FC = () => {
           
           <div className="flex justify-center">
              <a href="#intro" onClick={scrollToSection('intro')} className="group flex flex-col items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors cursor-pointer">
-                <span>SUNUMU BAŞLAT</span>
+                <span>İNCELEMEYE BAŞLA</span>
                 <span className="p-2 border border-slate-300 rounded-full group-hover:border-slate-900 transition-colors bg-white/50">
                     <ArrowDown size={16} />
                 </span>
@@ -157,7 +474,7 @@ const App: React.FC = () => {
               
               <SpeakerNote 
                   title="Sistem Felsefesi" 
-                  text="Sakai'nin temel felsefesi: Sadece bir kurs yazılımı değil, tüm kampüsü kapsayan akademik bir ekosistemdir. Akademik Odak, Mobil Uyum ve Açık Kaynak kullanımı." 
+                  text="Sakai'nin temel felsefesi: Sadece bir kurs yazılımı değil, tüm kampüsü kapsayan akademik bir ekosistemdir. Akademik Odak, Mobil Uyum ve Açık Kaynak mimarisi onu diğerlerinden ayırır." 
               />
             </div>
             <div className="md:col-span-8 text-lg text-slate-600 leading-relaxed space-y-6">
@@ -170,27 +487,17 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          {/* Roles Grid */}
+          {/* Roles Grid - NOW INTERACTIVE */}
           <div className="container mx-auto px-6 mt-16">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                 <FeatureCard 
-                    title="Hedef Kitle" 
-                    desc="Doğrudan Yüksek Öğretim (Üniversiteler, Kolejler) ve Akademik Araştırma Toplulukları." 
-                    icon={School} 
-                    delay="0s"
-                 />
-                 <FeatureCard 
-                    title="Esnek Roller" 
-                    desc="'Bu rollerle sınırlı değilsiniz.' Her dersin ihtiyacına göre asistan veya misafir yetkileri özelleştirilebilir." 
-                    icon={Users} 
-                    delay="0.1s"
-                 />
-                 <FeatureCard 
-                    title="Otomasyon" 
-                    desc="Öğrenci Bilgi Sistemleri (ÖBS) ile entegre çalışır. Kayıtlar otomatik akar, manuel iş yükü biter." 
-                    icon={Layers} 
-                    delay="0.2s"
-                 />
+                 {introFeatures.map((feature, idx) => (
+                     <FeatureCard 
+                        key={idx}
+                        feature={feature}
+                        onClick={() => setSelectedFeature(feature)}
+                        delay={`${idx * 0.1}s`}
+                     />
+                 ))}
              </div>
           </div>
         </section>
@@ -214,11 +521,11 @@ const App: React.FC = () => {
 
                         <SpeakerNote 
                             title="Pedagojik Tasarım" 
-                            text="Lessons (Modüller) aracı sistemin kalbidir. Öğrenciyi dağınık kaynaklar arasında kaybolmaktan kurtarır, hedefe yönelik sıralı bir yol sunar" 
+                            text="Lessons (Modüller) aracı sistemin kalbidir. Öğrenciyi dağınık kaynaklar arasında kaybolmaktan kurtarır, hedefe yönelik sıralı bir yol sunar." 
                         />
                     </div>
                     <div>
-                        <SakaiModulesDiagram />
+                        <SakaiModulesDiagram onClick={handleModuleClick} />
                     </div>
                 </div>
             </div>
@@ -256,6 +563,15 @@ const App: React.FC = () => {
                  </div>
 
                  <LTIIntegrationDiagram />
+                 
+                 <div className="text-center mt-6">
+                     <button 
+                        onClick={() => setSelectedFeature(ltiFeatureDetail)}
+                        className="inline-flex items-center gap-2 px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-full text-sm font-bold uppercase transition-colors"
+                     >
+                         <Info size={16} /> Teknik Detayları İncele
+                     </button>
+                 </div>
                  
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
                      <div className="p-8 bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700">
@@ -295,14 +611,37 @@ const App: React.FC = () => {
                 
                 <StrengthsDiagram />
                 
-                <div className="mt-8 max-w-3xl mx-auto p-6 bg-slate-50 rounded-xl border border-slate-200">
+                <div className="mt-8 max-w-3xl mx-auto p-6 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:border-sakai-blue hover:shadow-md transition-all"
+                     onClick={() => setSelectedFeature({
+                         id: 'tco',
+                         title: "Maliyet (TCO) & 'Bedava Yavru Köpek'",
+                         icon: DollarSign,
+                         fullDesc: (
+                             <>
+                                 <h4>TCO (Toplam Sahip Olma Maliyeti) Nedir?</h4>
+                                 <p>Sakai açık kaynak kodlu ve lisanssızdır. Ancak bu "masrafsız" olduğu anlamına gelmez.</p>
+                                 
+                                 <h4>'Free Puppy' (Bedava Yavru Köpek) Metaforu</h4>
+                                 <p>Literatürde bu durum şöyle açıklanır: "Bir arkadaşınız size bedava bir yavru köpek verebilir. Köpeği almak için para ödemezsiniz (Lisans Ücreti Yok). Ancak o köpeği beslemek, aşılarını yaptırmak, eğitmek ve barındırmak için sürekli para harcarsınız."</p>
+                                 
+                                 <h4>Sakai'nin Gider Kalemleri:</h4>
+                                 <ul>
+                                     <li><strong>Sunucu Barındırma:</strong> Yüksek trafikli bir üniversite için güçlü sunucular gerekir.</li>
+                                     <li><strong>Teknik Personel:</strong> Sistemi yönetecek, güncelleyecek ve yedekleyecek kalifiye IT ekibi şarttır.</li>
+                                     <li><strong>Eğitim:</strong> Eğitmenlerin sisteme adaptasyonu için eğitim bütçesi ayrılmalıdır.</li>
+                                 </ul>
+                                 <p>Buna rağmen, Blackboard veya Canvas gibi ticari rakiplerin yıllık lisans ücretlerine kıyasla Sakai'nin TCO'su genellikle daha düşüktür.</p>
+                             </>
+                         )
+                     })}
+                >
                      <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
                         <DollarSign size={18} className="text-red-500"/>
-                        Maliyet (TCO) Analizi: "Bedava Yavru Köpek" Metaforu
+                        Toplam Sahip Olma Maliyeti (TCO) <span className="text-xs font-normal text-slate-400 bg-slate-100 px-2 py-0.5 rounded ml-auto">Detay için tıkla</span>
                      </h4>
                      <p className="text-slate-600 text-sm leading-relaxed">
                         Sakai yazılımı ücretsizdir (Lisans bedeli yok). Ancak literatürde buna <em>"Free Puppy" (Bedava Yavru Köpek)</em> denir. 
-                        Yavru köpeği almak bedavadır ama maması, aşısı, bakımı masraflıdır. Sakai de böyledir; yazılıma para vermezsiniz ama sunucu ve bakım için bütçe ayırmalısınız.
+                        Yavru köpeği almak bedavadır ama maması, aşısı, bakımı masraflıdır. Sakai de böyledir...
                      </p>
                 </div>
             </div>
