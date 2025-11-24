@@ -9,19 +9,19 @@ import { Float, Sphere, Torus, Icosahedron, Environment, Stars } from '@react-th
 import * as THREE from 'three';
 
 // Fix for missing JSX type definitions for R3F elements
-// Extend JSX.IntrinsicElements to include Three.js elements used in this file
+// Explicitly define the Three.js elements used in JSX
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      mesh: any;
-      group: any;
-      meshStandardMaterial: any;
-      meshBasicMaterial: any;
-      cylinderGeometry: any;
-      sphereGeometry: any;
-      torusGeometry: any;
       ambientLight: any;
       pointLight: any;
+      group: any;
+      mesh: any;
+      sphereGeometry: any;
+      cylinderGeometry: any;
+      torusGeometry: any;
+      meshStandardMaterial: any;
+      meshBasicMaterial: any;
     }
   }
 }
