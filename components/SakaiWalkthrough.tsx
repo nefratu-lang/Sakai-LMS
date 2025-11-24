@@ -4,12 +4,48 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Layout, Users, FileCheck, Plug, ChevronRight, Info, Shield, ExternalLink, CheckCircle } from 'lucide-react';
+import { Layout, Users, FileCheck, Plug, ChevronRight, Info, Shield, ExternalLink, CheckCircle, Play } from 'lucide-react';
+
+// Define global types for SCORM API
+declare global {
+  interface Window {
+    API?: any;
+    API_1484_11?: any;
+  }
+}
 
 export const SakaiWalkthrough: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
+
+  // --- MOCK SCORM API ---
+  // SCORM paketleri çalışmak için bir LMS (Sakai) ararlar.
+  // Bu kod, tarayıcıda sahte bir LMS gibi davranarak paketin hata vermeden çalışmasını sağlar.
+  useEffect(() => {
+      // SCORM 1.2 API
+      window.API = {
+          LMSInitialize: () => "true",
+          LMSFinish: () => "true",
+          LMSGetValue: () => "",
+          LMSSetValue: () => "true",
+          LMSCommit: () => "true",
+          LMSGetLastError: () => "0",
+          LMSGetErrorString: () => "",
+          LMSGetDiagnostic: () => ""
+      };
+      // SCORM 2004 API
+      window.API_1484_11 = {
+          Initialize: () => "true",
+          Terminate: () => "true",
+          GetValue: () => "",
+          SetValue: () => "true",
+          Commit: () => "true",
+          GetLastError: () => "0",
+          GetErrorString: () => "",
+          GetDiagnostic: () => ""
+      };
+  }, []);
 
   const scenarios = [
     {
@@ -17,15 +53,16 @@ export const SakaiWalkthrough: React.FC = () => {
       title: "1. Ders Tasarımı & İçerik",
       icon: Layout,
       description: "Sakai'nin 'Lessons' aracı ile yapılandırmacı öğrenme süreçleri tasarlanabilir. Sol menü ve içerik alanı tamamen yönetilebilir.",
+      type: "image",
       images: [
         { 
             label: "Ders Sayfası Görünümü", 
-            src: "/images/slide-content.png", // Kullanıcı dosyası: TRADITIONAL APPROACHES...
+            src: "/images/slide-content.png",
             note: "Öğrenci görünümü: Sol menüden dersin akışını takip ederken, ana ekranda zengin içerik (slaytlar, metinler) görüntülenir."
         },
         { 
             label: "İçerik Ekleme Menüsü", 
-            src: "/images/add-content.png", // Kullanıcı dosyası: Add Content modal
+            src: "/images/add-content.png", 
             note: "'Add Content' butonu; Alt sayfa (Subpage), Ödev, Test, Tartışma veya dış kaynakları tek bir menüden eklemeyi sağlar."
         }
       ]
@@ -35,15 +72,16 @@ export const SakaiWalkthrough: React.FC = () => {
       title: "2. Grup Yönetimi",
       icon: Users,
       description: "Kalabalık sınıflar için hayat kurtarıcı özellikler. İster manuel, ister otomatik (random/kriter bazlı) gruplar oluşturulabilir.",
+      type: "image",
       images: [
         { 
             label: "Otomatik Grup Sihirbazı", 
-            src: "/images/auto-groups.png", // Kullanıcı dosyası: Auto-generated Groups
+            src: "/images/auto-groups.png", 
             note: "Adım 1: Hangi rollerin (Öğrenci, Asistan vb.) gruba dahil edileceği seçilir. Sistem bunları rastgele dağıtabilir."
         },
         { 
             label: "Manuel Grup Oluşturma", 
-            src: "/images/create-group.png", // Kullanıcı dosyası: Create New Group
+            src: "/images/create-group.png",
             note: "Özel proje grupleri için grup başlığı, açıklaması ve üyeleri manuel olarak belirlenebilir."
         }
       ]
@@ -53,10 +91,11 @@ export const SakaiWalkthrough: React.FC = () => {
       title: "3. Rol & Yetki Matrisi",
       icon: Shield,
       description: "Sakai'yi diğerlerinden ayıran en büyük güç: 'Permissions'. Her aracın yetkisi her rol için ayrı ayrı ayarlanabilir.",
+      type: "image",
       images: [
         { 
             label: "İzin Matrisi (Permissions)", 
-            src: "/images/permissions.png", // Kullanıcı dosyası: Permissions table
+            src: "/images/permissions.png",
             note: "Örneğin; 'Öğrenci podcast oluşturabilsin mi?', 'Kendi yorumunu silebilsin mi?' gibi yüzlerce ince ayar yapılabilir."
         }
       ]
@@ -66,15 +105,16 @@ export const SakaiWalkthrough: React.FC = () => {
       title: "4. Sınav & Ölçme",
       icon: FileCheck,
       description: "Basit testlerden karmaşık sınavlara kadar geniş bir yelpaze. Hot Spot, Sesli Yanıt ve Hesaplamalı sorular desteklenir.",
+      type: "image",
       images: [
         { 
             label: "Soru Tipi Seçimi", 
-            src: "/images/question-types.png", // Kullanıcı dosyası: Questions: 22 dropdown
+            src: "/images/question-types.png",
             note: "Dropdown menüde görülen zengin seçenekler: Calculated Question, File Upload, Survey, Audio Response..."
         },
         { 
             label: "Soru Düzenleme Editörü", 
-            src: "/images/edit-question.png", // Kullanıcı dosyası: Edit Question Section
+            src: "/images/edit-question.png",
             note: "Soru metni, şıklar, puan değeri ve geri bildirimler (feedback) tek ekrandan yönetilir."
         }
       ]
@@ -84,18 +124,27 @@ export const SakaiWalkthrough: React.FC = () => {
       title: "5. Entegrasyon (LTI/SCORM)",
       icon: Plug,
       description: "Sakai bir hub görevi görür. Dış araçlar (LTI) ve hazır paketler (SCORM) sisteme gömülür.",
+      type: "image",
       images: [
         { 
             label: "Harici Araç Seçici (LTI)", 
-            src: "/images/lti-tools.png", // Kullanıcı dosyası: External Tool Selector
+            src: "/images/lti-tools.png",
             note: "Sistem yöneticisi tarafından eklenen araçlar (Turnitin, BigBlueButton, Xerte) buradan derslere dahil edilir."
         },
         { 
             label: "SCORM Paket Listesi", 
-            src: "/images/scorm-list.png", // Kullanıcı dosyası: Longsight SCORM Player
+            src: "/images/scorm-list.png",
             note: "Articulate veya Captivate ile hazırlanan 'Golf Explained' gibi interaktif ders paketleri yüklenmiş ve kullanıma hazır."
         }
       ]
+    },
+    {
+        id: 5,
+        title: "6. Canlı SCORM Oynatıcı",
+        icon: Play,
+        description: "Cloud sunucuya gerek kalmadan, SCORM paketlerinin tarayıcı üzerinde nasıl simüle edildiğini gösterir.",
+        type: "scorm",
+        src: "/scorm-demo/res/index.html"
     }
   ];
 
@@ -141,6 +190,7 @@ export const SakaiWalkthrough: React.FC = () => {
                 </div>
                 <div>
                     <div className="font-bold text-sm">{item.title}</div>
+                    {item.type === "scorm" && <span className="text-[10px] bg-sakai-accent text-white px-1.5 py-0.5 rounded ml-2">LIVE</span>}
                 </div>
                 {activeTab === idx && <ChevronRight className="ml-auto opacity-50" size={16} />}
             </button>
@@ -148,7 +198,7 @@ export const SakaiWalkthrough: React.FC = () => {
         </div>
       </div>
 
-      {/* Right Content: Image Browser */}
+      {/* Right Content: Image Browser OR SCORM Player */}
       <div className="flex-1 bg-slate-100 rounded-xl p-4 border border-slate-200 flex flex-col relative overflow-hidden">
          
          {/* Browser Toolbar */}
@@ -159,58 +209,75 @@ export const SakaiWalkthrough: React.FC = () => {
                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
              </div>
              <div className="flex-1 bg-slate-50 rounded px-3 py-1 text-xs text-slate-400 font-mono text-center truncate flex items-center justify-center gap-2">
-                <Shield size={10} /> https://trysakai.longsight.com/portal/site/uze565-design-demo
+                <Shield size={10} /> 
+                {scenarios[activeTab].type === 'scorm' 
+                    ? 'https://sakai.local/scorm-player/content-viewer'
+                    : 'https://trysakai.longsight.com/portal/site/uze565-design-demo'
+                }
              </div>
          </div>
 
-         {/* Image Area - Scrollable */}
+         {/* Content Area */}
          <div className="flex-1 bg-white rounded-b-lg overflow-y-auto relative shadow-inner scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
-            <AnimatePresence mode="wait">
-                <motion.div 
-                    key={activeTab}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="p-6 space-y-10"
-                >
-                    <div className="p-4 bg-blue-50 text-blue-900 text-sm rounded-lg border-l-4 border-blue-500 shadow-sm flex gap-3">
-                        <Info className="shrink-0 text-blue-500" size={20}/>
-                        <p className="leading-relaxed">{scenarios[activeTab].description}</p>
+            {scenarios[activeTab].type === 'scorm' ? (
+                // SCORM PLAYER IFRAME
+                <div className="w-full h-full flex flex-col">
+                    <iframe 
+                        src={scenarios[activeTab].src}
+                        className="w-full h-full border-none"
+                        title="SCORM Player"
+                        allowFullScreen
+                    />
+                    <div className="p-2 bg-slate-900 text-white text-xs text-center">
+                        Mock API Active • SCORM 1.2 / 2004 Bridge Connected
                     </div>
-
-                    {scenarios[activeTab].images.map((img, imgIdx) => (
-                        <div key={imgIdx} className="group">
-                            <div className="mb-3 flex items-center gap-3 border-b border-slate-100 pb-2">
-                                <span className="px-2 py-1 bg-slate-800 text-white text-[10px] font-bold uppercase rounded tracking-wider shadow-sm">
-                                    ADIM {imgIdx + 1}
-                                </span>
-                                <span className="text-base font-bold text-slate-800">{img.label}</span>
-                            </div>
-                            
-                            {/* Image Container */}
-                            <div className="rounded-lg border-4 border-slate-100 overflow-hidden shadow-lg mb-4 bg-slate-200 relative min-h-[200px]">
-                                <img 
-                                    src={img.src} 
-                                    alt={img.label}
-                                    onError={(e) => {
-                                        // Fallback if image not found
-                                        (e.target as HTMLImageElement).src = `https://placehold.co/1200x800/f1f5f9/1e293b?text=${encodeURIComponent(img.label)}+Wait+for+Upload`;
-                                    }}
-                                    className="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-500 block"
-                                />
-                                <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/50 text-white text-[10px] rounded backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Click to expand
-                                </div>
-                            </div>
-                            
-                            <p className="text-sm text-slate-600 italic border-l-2 border-sakai-blue pl-4 py-1">
-                                {img.note}
-                            </p>
+                </div>
+            ) : (
+                // IMAGE BROWSER
+                <AnimatePresence mode="wait">
+                    <motion.div 
+                        key={activeTab}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                        className="p-6 space-y-10"
+                    >
+                        <div className="p-4 bg-blue-50 text-blue-900 text-sm rounded-lg border-l-4 border-blue-500 shadow-sm flex gap-3">
+                            <Info className="shrink-0 text-blue-500" size={20}/>
+                            <p className="leading-relaxed">{scenarios[activeTab].description}</p>
                         </div>
-                    ))}
-                </motion.div>
-            </AnimatePresence>
+
+                        {scenarios[activeTab].images?.map((img, imgIdx) => (
+                            <div key={imgIdx} className="group">
+                                <div className="mb-3 flex items-center gap-3 border-b border-slate-100 pb-2">
+                                    <span className="px-2 py-1 bg-slate-800 text-white text-[10px] font-bold uppercase rounded tracking-wider shadow-sm">
+                                        ADIM {imgIdx + 1}
+                                    </span>
+                                    <span className="text-base font-bold text-slate-800">{img.label}</span>
+                                </div>
+                                
+                                {/* Image Container */}
+                                <div className="rounded-lg border-4 border-slate-100 overflow-hidden shadow-lg mb-4 bg-slate-200 relative min-h-[200px]">
+                                    <img 
+                                        src={img.src} 
+                                        alt={img.label}
+                                        onError={(e) => {
+                                            // Fallback if image not found
+                                            (e.target as HTMLImageElement).src = `https://placehold.co/1200x800/f1f5f9/1e293b?text=${encodeURIComponent(img.label)}+Wait+for+Upload`;
+                                        }}
+                                        className="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-500 block"
+                                    />
+                                </div>
+                                
+                                <p className="text-sm text-slate-600 italic border-l-2 border-sakai-blue pl-4 py-1">
+                                    {img.note}
+                                </p>
+                            </div>
+                        ))}
+                    </motion.div>
+                </AnimatePresence>
+            )}
          </div>
 
       </div>
