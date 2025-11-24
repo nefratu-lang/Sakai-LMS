@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest identifier="KxicDbsZ9VWxY" xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" xmlns:imsss="http://www.imsglobal.org/xsd/imsss" xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_v1p3" xmlns:adlseq="http://www.adlnet.org/xsd/adlseq_v1p3" xmlns:adlnav="http://www.adlnet.org/xsd/adlnav_v1p3" xmlns:lom="http://ltsc.ieee.org/xsd/LOM" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 imscp_v1p1.xsd http://www.imsglobal.org/xsd/imsss imsss_v1p0.xsd http://www.adlnet.org/xsd/adlcp_v1p3 adlcp_v1p3.xsd http://www.adlnet.org/xsd/adlseq_v1p3 adlseq_v1p3.xsd http://www.adlnet.org/xsd/adlnav_v1p3 adlnav_v1p3.xsd http://ltsc.ieee.org/xsd/LOM lom.xsd">
+	<metadata>
+		<schema>ADL SCORM</schema>
+		<schemaversion>2004 3rd Edition</schemaversion>
+		<lom:lom>
+			<lom:general>
+				<lom:title>
+					<lom:string>OgrenmeTasarimi</lom:string>
+				</lom:title>
+			</lom:general>
+			<lom:educational>
+				<lom:typicalLearningTime>
+					<lom:duration>PT1H0M0S</lom:duration>
+				</lom:typicalLearningTime>
+			</lom:educational>
+		</lom:lom>
+	</metadata>
+	<organizations default="ogrenmetasarimi_organization">
+		<organization identifier="ogrenmetasarimi_organization">
+			<title>OgrenmeTasarimi</title>
+			<item identifier="AE280295-60E6-43F8-BE3E-2CAA1F8A1151" identifierref="resource">
+				<title>OgrenmeTasarimi</title>
+				<imsss:sequencing>
+					<imsss:deliveryControls completionSetByContent="true" objectiveSetByContent="true"/>
+			       	</imsss:sequencing>
+			</item>
+			<imsss:sequencing>
+				<imsss:controlMode flow="true"/>
+			</imsss:sequencing>
+		</organization>
+	</organizations>
+	<resources>
+		<resource identifier="resource" type="webcontent" adlcp:scormType="sco" href="res/index.html">
+			<file href="res/data/apple-touch-icon.png"/>
+<file href="res/data/audios/snd-20eaaebfdd90a97725df89cfee7e93ce733d812b.mp3"/>
+<file href="res/data/browsersupport.js"/>
+<file href="res/data/favicon.ico"/>
+<file href="res/data/fonts/fnt0.woff"/>
+<file href="res/data/fonts/fnt1.woff"/>
+<file href="res/data/fonts/fnt2.woff"/>
+<file href="res/data/fonts/fnt3.woff"/>
+<file href="res/data/fonts/fnt4.woff"/>
+<file href="res/data/goodbye.html"/>
+<file href="res/data/html5-unsupported.html"/>
+<file href="res/data/images/img-162e07a2684ab48fdcaf99cb34f32bf9d17022cc.jpg"/>
+<file href="res/data/images/img-28dd5a3028188b4ae1bb943c160293c85836f2d4.jpg"/>
+<file href="res/data/images/img-3974f893f3858514ded7cee16cb8a9161aebfd01.jpg"/>
+<file href="res/data/images/img-42b1e0141a47ad3183ce0ec7619f322dd995c2ad.jpg"/>
+<file href="res/data/images/img-4852570303979d3b8582867c9e295fca2b292541.jpg"/>
+<file href="res/data/images/img-520e269d7a2a03cf55aa1eead7d05c7580874cac.jpg"/>
+<file href="res/data/images/img-6998561268818853ef3fdca8ac9f29b08acf6988.jpg"/>
+<file href="res/data/images/img-6a6f73ffdbe04894ae7cef57a55e5acf55baaa49.jpg"/>
+<file href="res/data/images/img-7ef68889dae2f12c466afaa1ba97c1888b44b019.jpg"/>
+<file href="res/data/images/img-a3a78658116fa6fa4f5ba959718b555048a9d51f.jpg"/>
+<file href="res/data/lms.js"/>
+<file href="res/data/player.js"/>
+<file href="res/data/videos/video-a3a78658116fa6fa4f5ba959718b555048a9d51f.webm"/>
+<file href="res/index.html"/>
+
+		</resource>
+	</resources>
+</manifest>
