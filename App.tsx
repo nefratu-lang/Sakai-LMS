@@ -9,7 +9,7 @@ import { HeroScene, NetworkScene } from './components/QuantumScene';
 import { SakaiModulesDiagram, LTIIntegrationDiagram, StrengthsDiagram } from './components/Diagrams';
 import { SakaiVsCanvas } from './components/SakaiVsCanvas';
 import { SakaiWalkthrough } from './components/SakaiWalkthrough';
-import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay, ExternalLink, Lightbulb, PenTool, DollarSign, ChevronRight, Info, ArrowRight, FileCheck, CheckCircle, Globe, Wrench, Smartphone, Server, PlayCircle } from 'lucide-react';
+import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay, ExternalLink, Lightbulb, PenTool, DollarSign, ChevronRight, Info, ArrowRight, FileCheck, CheckCircle, Globe, Wrench, Smartphone, Server, PlayCircle, UserPlus, QrCode } from 'lucide-react';
 
 // --- Types ---
 interface FeatureDetail {
@@ -128,6 +128,7 @@ const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedFeature, setSelectedFeature] = useState<FeatureDetail | null>(null);
+  const [qrOpen, setQrOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -302,8 +303,26 @@ const App: React.FC = () => {
                       </p>
                   </div>
                   
-                  <div className="p-3 bg-green-50 text-green-800 rounded border border-green-200 text-sm">
+                  <div className="p-3 bg-green-50 text-green-800 rounded border border-green-200 text-sm mb-4">
                       <strong>Sonuç:</strong> Eğitmenin "öğrenci ekleme" yükü ortadan kalkar, sistem tamamen otomatik işler.
+                  </div>
+
+                  {/* MANUAL USER CREATION TIP */}
+                  <div className="p-4 bg-slate-100 rounded-lg border border-slate-200 text-sm">
+                      <div className="flex items-center gap-2 mb-2 text-slate-800 font-bold">
+                          <UserPlus size={16} className="text-sakai-blue"/> 
+                          İpucu: Demo İçin Manuel Öğrenci Hesabı Açma
+                      </div>
+                      <p className="text-slate-600 mb-2">
+                          Admin paneli görünmüyorsa, doğrudan ders içinden kullanıcı ekleyebilirsiniz:
+                      </p>
+                      <ol className="list-decimal list-inside space-y-1 text-slate-600 ml-2">
+                          <li>Dersin içinde soldan <strong>Site Info</strong> aracına tıklayın.</li>
+                          <li>Üstteki sekmelerden <strong>Add Participants</strong> butonuna basın. (Genellikle 'Date Manager' ve 'Manage Participants' arasındadır).</li>
+                          <li>Kutucuğa <code>ogrenci@demo.com</code> yazıp <strong>Continue</strong> deyin.</li>
+                          <li>"Create New User" seçeneği çıkarsa işaretleyip şifreyi <code>sakai123</code> yapın.</li>
+                          <li>Rolünü <strong>Student</strong> seçip kaydedin. Artık bu bilgilerle giriş yapılabilir.</li>
+                      </ol>
                   </div>
               </>
           )
@@ -694,6 +713,15 @@ const App: React.FC = () => {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#F0F4F8]/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
         <div className="container mx-auto px-6 flex justify-between items-center">
           <div className="flex items-center gap-4 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            {/* QR Code Button */}
+            <button 
+                onClick={() => setQrOpen(true)}
+                className="w-8 h-8 bg-white border border-slate-200 rounded-lg flex items-center justify-center text-slate-600 hover:text-sakai-blue hover:border-sakai-blue transition-colors shadow-sm"
+                title="QR Kodunu Göster"
+            >
+                <QrCode size={18} />
+            </button>
+
             <div className="w-8 h-8 bg-sakai-blue rounded-lg flex items-center justify-center text-white font-serif font-bold text-xl shadow-sm pb-1">S</div>
             <span className={`font-serif font-bold text-lg tracking-wide transition-opacity ${scrolled ? 'opacity-100' : 'opacity-0 md:opacity-100'}`}>
               SAKAI <span className="font-normal text-slate-500">LMS</span>
@@ -726,6 +754,36 @@ const App: React.FC = () => {
           </button>
         </div>
       </nav>
+
+      {/* QR Code Modal (Lightbox) */}
+      {qrOpen && (
+          <div 
+            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in"
+            onClick={() => setQrOpen(false)}
+          >
+             <div className="bg-white p-6 rounded-2xl shadow-2xl max-w-sm w-full animate-scale-in" onClick={(e) => e.stopPropagation()}>
+                 <div className="flex justify-between items-center mb-4">
+                     <h3 className="font-serif text-xl font-bold text-slate-900">Sunuma Katıl</h3>
+                     <button onClick={() => setQrOpen(false)} className="p-1 hover:bg-slate-100 rounded-full transition-colors">
+                         <X size={24} className="text-slate-500"/>
+                     </button>
+                 </div>
+                 <div className="bg-slate-50 p-4 rounded-xl border-2 border-dashed border-slate-200 flex items-center justify-center">
+                    <img 
+                        src="/images/qr-code.png" 
+                        alt="Sunum QR Kodu" 
+                        className="w-full h-auto rounded-lg shadow-sm object-contain" 
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(window.location.href);
+                        }}
+                    />
+                 </div>
+                 <p className="text-center mt-4 text-slate-500 text-sm font-medium">
+                     Telefonunuzun kamerasıyla okutarak sunum sayfasına anında erişebilirsiniz.
+                 </p>
+             </div>
+          </div>
+      )}
 
       {/* Mobile Menu */}
       {menuOpen && (
