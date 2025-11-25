@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -22,6 +23,7 @@ declare global {
       torusGeometry: any;
       meshStandardMaterial: any;
       meshBasicMaterial: any;
+      [elemName: string]: any;
     }
   }
 }
