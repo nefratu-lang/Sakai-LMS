@@ -1,4 +1,3 @@
-
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -49,7 +48,7 @@ const universities: University[] = [
     { id: 'ghana', name: "Univ. of Ghana", lat: 5.60, lng: -0.18, status: 'active', timeline: "2014 > Present" }
 ];
 
-const Marker = ({ data }: { data: University }) => {
+const Marker: React.FC<{ data: University }> = ({ data }) => {
     // Equirectangular Projection Alignment
     // Longitude: -180 to 180 -> 0% to 100%
     // Latitude: 90 to -90 -> 0% to 100%
@@ -95,48 +94,50 @@ const Marker = ({ data }: { data: University }) => {
 
 export const GlobalAdoptionMap: React.FC = () => {
   return (
-    <div className="w-full h-full min-h-[500px] relative bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-800">
+    <div className="w-full h-full min-h-[500px] bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-800 flex items-center justify-center p-4">
         
-        {/* Map Background */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+        {/* 
+            CRITICAL FIX: ASPECT RATIO CONTAINER 
+            This div enforces a strictly 2:1 Aspect Ratio (standard equirectangular projection).
+            Both the Map Image and the Markers live inside this SAME coordinate system.
+            This prevents markers from drifting when the browser resizes.
+        */}
+        <div className="relative w-full max-w-6xl aspect-[2/1]">
+            
+            {/* Map Background Layer */}
             <div 
-                className="w-full h-full bg-contain bg-center bg-no-repeat opacity-70 invert transition-opacity duration-500"
+                className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
                 style={{
                     backgroundImage: "url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')",
-                    filter: 'invert(1) opacity(0.5) drop-shadow(0 0 2px rgba(255,255,255,0.3))'
+                    filter: 'invert(1) opacity(0.6) drop-shadow(0 0 2px rgba(255,255,255,0.5))'
                 }}
             ></div>
-        </div>
 
-        {/* Markers Container */}
-        {/* We use a 2:1 Aspect Ratio container centered in the div to align markers with the Equirectangular map image */}
-        <div className="absolute inset-0 flex items-center justify-center">
-            <div className="relative w-full aspect-[2/1] max-h-full">
-                {universities.map((uni) => (
-                    <Marker key={uni.id} data={uni} />
-                ))}
-            </div>
-        </div>
+            {/* Markers Layer - Same Coordinate Space */}
+            {universities.map((uni) => (
+                <Marker key={uni.id} data={uni} />
+            ))}
 
-        {/* Legend */}
-        <div className="absolute top-4 right-4 bg-slate-900/90 backdrop-blur p-3 rounded-lg border border-slate-700 text-white shadow-lg z-10">
-            <h4 className="text-[10px] font-bold uppercase tracking-widest mb-2 text-slate-400">Küresel Durum</h4>
-            <div className="space-y-1.5 text-xs">
-                <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.8)]"></span>
-                    <span>Aktif (Sakai Kalesi)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_5px_rgba(249,115,22,0.8)]"></span>
-                    <span>Geçiş Aşamasında</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.8)]"></span>
-                    <span>Sistemi Bırakanlar</span>
+            {/* Legend */}
+            <div className="absolute top-4 right-4 bg-slate-900/90 backdrop-blur p-3 rounded-lg border border-slate-700 text-white shadow-lg z-20">
+                <h4 className="text-[10px] font-bold uppercase tracking-widest mb-2 text-slate-400">Küresel Durum</h4>
+                <div className="space-y-1.5 text-xs">
+                    <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.8)]"></span>
+                        <span>Aktif (Sakai Kalesi)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_5px_rgba(249,115,22,0.8)]"></span>
+                        <span>Geçiş Aşamasında</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.8)]"></span>
+                        <span>Sistemi Bırakanlar</span>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
   );
 };
-
