@@ -9,6 +9,7 @@ import { HeroScene, NetworkScene } from './components/QuantumScene';
 import { SakaiModulesDiagram, LTIIntegrationDiagram, StrengthsDiagram } from './components/Diagrams';
 import { SakaiVsCanvas } from './components/SakaiVsCanvas';
 import { SakaiWalkthrough } from './components/SakaiWalkthrough';
+import { GlobalAdoptionMap } from './components/GlobalAdoptionMap';
 import { ArrowDown, Menu, X, BookOpen, Users, Layers, BarChart2, Shield, Plug, Video, FileText, MessageSquare, School, MonitorPlay, ExternalLink, Lightbulb, PenTool, DollarSign, ChevronRight, Info, ArrowRight, FileCheck, CheckCircle, Globe, Wrench, Smartphone, Server, PlayCircle, UserPlus, QrCode } from 'lucide-react';
 
 // --- Types ---
@@ -154,7 +155,6 @@ const App: React.FC = () => {
 
   // --- DATA: Deep Content from PDF Report ---
   
-  // 1. Introduction Cards Data
   const introFeatures: FeatureDetail[] = [
       {
           id: 'target',
@@ -185,7 +185,6 @@ const App: React.FC = () => {
                       <li><strong>Araştırma Grupları:</strong> Ortak çalışma ve dosya paylaşım alanları (Project Sites).</li>
                   </ul>
 
-                  {/* VIDEO DEMO SECTION */}
                   <div className="my-6">
                       <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
                          <PlayCircle size={18} className="text-sakai-blue"/> 
@@ -236,7 +235,6 @@ const App: React.FC = () => {
                   <h4>Kimlik Doğrulama (SSO)</h4>
                   <p>LDAP, Active Directory ve CAS/Shibboleth desteği ile kurumun mevcut şifreleriyle giriş yapılır.</p>
 
-                  {/* VIDEO DEMO SECTION */}
                   <div className="my-6">
                       <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
                          <PlayCircle size={18} className="text-sakai-blue"/> 
@@ -280,7 +278,6 @@ const App: React.FC = () => {
                       Tek tek kayıt yapmak yerine, CSV dosyalarıyla binlerce kullanıcı saniyeler içinde sisteme yüklenebilir.
                   </p>
 
-                  {/* VIDEO DEMO SECTION */}
                   <div className="my-6">
                       <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
                          <PlayCircle size={18} className="text-sakai-blue"/> 
@@ -307,21 +304,19 @@ const App: React.FC = () => {
                       <strong>Sonuç:</strong> Eğitmenin "öğrenci ekleme" yükü ortadan kalkar, sistem tamamen otomatik işler.
                   </div>
 
-                  {/* MANUAL USER CREATION TIP */}
                   <div className="p-4 bg-slate-100 rounded-lg border border-slate-200 text-sm">
                       <div className="flex items-center gap-2 mb-2 text-slate-800 font-bold">
                           <UserPlus size={16} className="text-sakai-blue"/> 
                           İpucu: Demo İçin Manuel Öğrenci Hesabı Açma
                       </div>
                       <p className="text-slate-600 mb-2">
-                          Admin paneli görünmüyorsa, doğrudan ders içinden kullanıcı ekleyebilirsiniz:
+                          Site Info içinde 'Date Manager' yanındaki <strong>Add Participants</strong> sekmesini kullanın:
                       </p>
                       <ol className="list-decimal list-inside space-y-1 text-slate-600 ml-2">
-                          <li>Dersin içinde soldan <strong>Site Info</strong> aracına tıklayın.</li>
-                          <li>Üstteki sekmelerden <strong>Add Participants</strong> butonuna basın. (Genellikle 'Date Manager' ve 'Manage Participants' arasındadır).</li>
+                          <li><strong>Add Participants</strong> sekmesine basın.</li>
                           <li>Kutucuğa <code>ogrenci@demo.com</code> yazıp <strong>Continue</strong> deyin.</li>
                           <li>"Create New User" seçeneği çıkarsa işaretleyip şifreyi <code>sakai123</code> yapın.</li>
-                          <li>Rolünü <strong>Student</strong> seçip kaydedin. Artık bu bilgilerle giriş yapılabilir.</li>
+                          <li>Rolünü <strong>Student</strong> seçip kaydedin.</li>
                       </ol>
                   </div>
               </>
@@ -329,7 +324,6 @@ const App: React.FC = () => {
       }
   ];
 
-  // 2. Module Details Data (For Diagram Clicks)
   const moduleDetails: Record<number, FeatureDetail> = {
       0: {
           id: 'lessons',
@@ -347,7 +341,6 @@ const App: React.FC = () => {
                   </ul>
                   <p>Sakai 11 ve sonrası sürümlerde "Morpheus" arayüzü ile tamamen mobil uyumlu hale gelmiştir.</p>
 
-                  {/* VIDEO SECTION FOR LESSONS */}
                   <div className="my-6">
                       <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
                          <PlayCircle size={18} className="text-sakai-blue"/> 
@@ -388,7 +381,6 @@ const App: React.FC = () => {
                       <li><strong>Inline Grading:</strong> Eğitmenler Word/PDF dosyalarını indirmeden tarayıcı üzerinde notlandırabilir.</li>
                   </ul>
 
-                  {/* VIDEO SECTION FOR ASSIGNMENTS */}
                   <div className="my-6">
                       <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
                          <PlayCircle size={18} className="text-sakai-blue"/> 
@@ -425,7 +417,6 @@ const App: React.FC = () => {
                       <li><strong>Soru Havuzları:</strong> Sorular havuzlarda saklanır ve her öğrenciye havuzdan rastgele soru çekilerek kopya riski azaltılır.</li>
                   </ul>
 
-                  {/* VIDEO SECTION FOR TESTS */}
                   <div className="my-6">
                       <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
                          <PlayCircle size={18} className="text-sakai-blue"/> 
@@ -461,7 +452,6 @@ const App: React.FC = () => {
                       <li><strong>Conversations:</strong> Sakai 23+ sürümlerinde gelen yeni özellik, sosyal medya tarzı hızlı ve modern bir tartışma akışı sunar.</li>
                   </ul>
 
-                  {/* VIDEO SECTION FOR FORUM */}
                   <div className="my-6">
                       <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
                          <PlayCircle size={18} className="text-sakai-blue"/> 
@@ -497,7 +487,6 @@ const App: React.FC = () => {
                       <li><strong>İçe/Dışa Aktarım:</strong> Excel dosyalarıyla toplu not girişi veya yedeği alınabilir.</li>
                   </ul>
 
-                  {/* VIDEO SECTION FOR GRADEBOOK */}
                   <div className="my-6">
                       <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
                          <PlayCircle size={18} className="text-sakai-blue"/> 
@@ -533,7 +522,6 @@ const App: React.FC = () => {
                       <li><strong>HTML Sayfalar:</strong> Sadece dosya değil, doğrudan tarayıcıda açılan HTML sayfalar oluşturulabilir.</li>
                   </ul>
 
-                  {/* VIDEO SECTION FOR RESOURCES */}
                   <div className="my-6">
                       <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-700">
                          <PlayCircle size={18} className="text-sakai-blue"/> 
@@ -557,7 +545,6 @@ const App: React.FC = () => {
       }
   };
 
-  // 3. Detailed Strengths & Weaknesses Data
   const strengthDetails: Record<string, FeatureDetail> = {
       'strength-opensource': {
           id: 'strength-opensource',
@@ -734,6 +721,7 @@ const App: React.FC = () => {
             <a href="#demo" onClick={scrollToSection('demo')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Demo</a>
             <a href="#proscons" onClick={scrollToSection('proscons')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Analiz</a>
             <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canvas</a>
+            <a href="#conclusion" onClick={scrollToSection('conclusion')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">SONUÇ</a>
             
             <a 
                 href="https://trysakai.longsight.com/portal/site/6bab8ed5-8859-40f4-8d8a-f50f9da06975" 
@@ -793,6 +781,7 @@ const App: React.FC = () => {
             <a href="#demo" onClick={scrollToSection('demo')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Arayüz Simülasyonu</a>
             <a href="#proscons" onClick={scrollToSection('proscons')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Güçlü Yönler</a>
             <a href="#comparison" onClick={scrollToSection('comparison')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">Sakai vs Canvas</a>
+            <a href="#conclusion" onClick={scrollToSection('conclusion')} className="hover:text-sakai-blue transition-colors cursor-pointer uppercase">SONUÇ</a>
             <a href="https://trysakai.longsight.com/portal/site/6bab8ed5-8859-40f4-8d8a-f50f9da06975" target="_blank" rel="noopener noreferrer" className="text-amber-700 font-bold flex items-center gap-2">
                 <ExternalLink size={20} /> Cloud Server'a Git
             </a>
@@ -1008,38 +997,41 @@ const App: React.FC = () => {
              </div>
         </section>
 
-        {/* Conclusion */}
-        <section className="py-24 bg-white border-t border-slate-200">
-             <div className="container mx-auto px-6 text-center max-w-4xl">
-                 <div className="w-16 h-16 bg-sakai-blue text-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg shadow-sakai-blue/30 text-2xl font-serif font-bold">
+        {/* Conclusion WITH 2D MAP */}
+        <section id="conclusion" className="relative bg-slate-900 overflow-hidden flex flex-col lg:flex-row items-center justify-center border-t border-slate-800">
+             {/* Map Container */}
+             <div className="w-full lg:w-2/3 h-[600px] relative order-2 lg:order-1">
+                 <GlobalAdoptionMap />
+             </div>
+             
+             {/* Content Overlay/Sidebar */}
+             <div className="w-full lg:w-1/3 p-8 lg:p-12 bg-slate-900 z-10 flex flex-col justify-center h-full order-1 lg:order-2 border-b lg:border-b-0 lg:border-l border-slate-800">
+                <div className="w-12 h-12 bg-sakai-blue text-white rounded-full flex items-center justify-center mb-6 shadow-lg shadow-sakai-blue/30 text-xl font-serif font-bold">
                     S
-                 </div>
-                 <h2 className="font-serif text-4xl md:text-5xl mb-8 text-slate-900">Sonuç</h2>
-                 <p className="text-xl text-slate-600 leading-relaxed mb-12">
+                </div>
+                <h2 className="font-serif text-3xl md:text-4xl mb-6 text-white">Sonuç</h2>
+                <p className="text-lg text-slate-300 leading-relaxed mb-8">
                     "Sakai'yi tercih ettiğinizde sadece bir yazılımı değil, arkasındaki devasa küresel tecrübeyi kampüsünüze getirmiş oluyorsunuz. Notre Dame, Pepperdine gibi prestijli üniversitelerin kullandığı bu yapı, akademik özgürlüğün dijital kalesidir."
-                 </p>
-                 
-                 <div className="flex flex-col md:flex-row justify-center gap-6 mt-12">
-                     <div className="p-6 bg-slate-50 rounded-xl border border-slate-100 flex-1">
-                        <h4 className="font-bold text-slate-800 mb-2">Resmî Dokümantasyon</h4>
-                        <p className="text-sm text-slate-500 mb-4">Apereo Vakfı rehberleri.</p>
-                        <a href="https://www.apereo.org/programs/software/sakai-lms" target="_blank" rel="noopener noreferrer" className="text-sakai-blue font-bold text-sm hover:underline">Ziyaret Et &rarr;</a>
-                     </div>
-                     <div className="p-6 bg-slate-50 rounded-xl border border-slate-100 flex-1">
-                        <h4 className="font-bold text-slate-800 mb-2">Topluluk Forumları</h4>
-                        <p className="text-sm text-slate-500 mb-4">Google Groups & Slack.</p>
-                        <a href="https://sakai.screenstepslive.com/s/sakai_help" target="_blank" rel="noopener noreferrer" className="text-sakai-blue font-bold text-sm hover:underline">Katıl &rarr;</a>
-                     </div>
-                     <div className="p-6 bg-slate-50 rounded-xl border border-slate-100 flex-1">
-                        <h4 className="font-bold text-slate-800 mb-2">Videolar & Öğreticiler</h4>
-                        <p className="text-sm text-slate-500 mb-4">Eğitim serileri.</p>
-                        <a href="https://www.youtube.com/@SakaiCLE" target="_blank" rel="noopener noreferrer" className="text-sakai-blue font-bold text-sm hover:underline">İzle &rarr;</a>
-                     </div>
-                 </div>
+                </p>
+                
+                <div className="flex flex-col gap-4">
+                    <a href="https://www.apereo.org/programs/software/sakai-lms" target="_blank" rel="noopener noreferrer" className="p-4 bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition-colors group">
+                        <div className="text-sakai-accent font-bold text-sm flex items-center gap-2 mb-1">
+                            Resmî Dokümantasyon <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform"/>
+                        </div>
+                        <div className="text-xs text-slate-500">Apereo Vakfı Rehberleri</div>
+                    </a>
+                    <a href="https://sakai.screenstepslive.com/s/sakai_help" target="_blank" rel="noopener noreferrer" className="p-4 bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition-colors group">
+                        <div className="text-sakai-accent font-bold text-sm flex items-center gap-2 mb-1">
+                            Topluluk Forumları <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform"/>
+                        </div>
+                        <div className="text-xs text-slate-500">Google Groups & Slack</div>
+                    </a>
+                </div>
              </div>
         </section>
 
-        <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <footer className="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 relative z-10">
             <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
                 <div>
                     <span className="text-white font-serif font-bold text-lg">SAKAI LMS</span>
