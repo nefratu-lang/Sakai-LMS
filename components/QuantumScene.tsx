@@ -9,8 +9,23 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Sphere, Torus, Icosahedron, Environment, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Removed conflicting global JSX declaration that was breaking standard HTML elements.
-// R3F types are expected to be provided by @react-three/fiber.
+// Augment the global JSX namespace to include Three.js intrinsic elements
+// This fixes errors where TypeScript doesn't recognize R3F elements
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      group: any;
+      mesh: any;
+      meshStandardMaterial: any;
+      meshBasicMaterial: any;
+      cylinderGeometry: any;
+      sphereGeometry: any;
+      torusGeometry: any;
+      ambientLight: any;
+      pointLight: any;
+    }
+  }
+}
 
 const FloatingNode = ({ position, color, scale = 1 }: { position: [number, number, number]; color: string; scale?: number }) => {
   const ref = useRef<THREE.Mesh>(null);
