@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 
-import React, { useState } from 'react';
-import { Globe, CheckCircle, AlertTriangle, XCircle, Info } from 'lucide-react';
+import React from 'react';
 
 // --- DATA TYPES ---
 type Status = 'active' | 'migrating' | 'stopped';
@@ -14,105 +13,110 @@ interface University {
     id: string;
     name: string;
     status: Status;
-    pos: { top: number; left: number }; // Percentage based positioning (0-100)
-    details: string;
+    x: number; // SVG Coordinate X (0-1000)
+    y: number; // SVG Coordinate Y (0-500)
+    align: 'left' | 'right'; // Label alignment to avoid overlapping
 }
 
-// --- DATA SET (Calibrated for 2D Equirectangular Map) ---
+// --- DATA SET (SVG Coordinates 1000x500) ---
+// CALIBRATION V7: Shifted DOWN (South) by 25 units from V6. 
+// This places markers correctly in the Mediterranean band (approx 135px Y for Turkey).
 const universities: University[] = [
     // Europe
-    { id: 'oxford', name: "Oxford (UK)", status: 'stopped', pos: { top: 22, left: 48 }, details: "Migrated to Canvas (2022)" },
-    { id: 'murcia', name: "Univ. of Murcia (Spain)", status: 'active', pos: { top: 30, left: 48 }, details: "2009 > Present" },
-    { id: 'berlin', name: "Freie Univ. Berlin", status: 'active', pos: { top: 23, left: 52 }, details: "2015 > Present" },
+    { id: 'murcia', name: "U. Murcia (ES)", status: 'active', x: 480, y: 130, align: 'right' },
+    { id: 'oxford', name: "Oxford (UK)", status: 'stopped', x: 470, y: 100, align: 'left' },
+    { id: 'berlin', name: "Freie Berlin", status: 'active', x: 510, y: 105, align: 'right' },
     
-    // Turkey
-    { id: 'yasar', name: "Yaşar University (Turkey)", status: 'active', pos: { top: 31, left: 56 }, details: "Izmir / 2012 > Present" },
+    // Turkey (Shifted South to 135 - Perfect align for 38N)
+    { id: 'yasar', name: "Yaşar Üni.", status: 'active', x: 555, y: 135, align: 'right' },
     
     // Asia
-    { id: 'lahore', name: "Lahore Univ. (Pakistan)", status: 'active', pos: { top: 35, left: 68 }, details: "2009 > Present" },
-    { id: 'kyoto', name: "Kyoto Univ. (Japan)", status: 'active', pos: { top: 33, left: 86 }, details: "Custom 'PandA' System" },
-    { id: 'hutech', name: "HUTECH (Vietnam)", status: 'active', pos: { top: 46, left: 78 }, details: "2014 > Present" },
+    { id: 'lahore', name: "Lahore (PAK)", status: 'active', x: 660, y: 155, align: 'right' },
+    { id: 'kyoto', name: "Kyoto (JP)", status: 'active', x: 860, y: 140, align: 'left' },
+    { id: 'hutech', name: "HUTECH (VN)", status: 'active', x: 780, y: 195, align: 'left' },
 
-    // North America (USA)
-    { id: 'michigan', name: "Univ. of Michigan", status: 'stopped', pos: { top: 28, left: 26 }, details: "Founder / Migrated" },
-    { id: 'notre', name: "Notre Dame", status: 'stopped', pos: { top: 29, left: 25 }, details: "Migrated (2022)" },
-    { id: 'duke', name: "Duke University", status: 'migrating', pos: { top: 32, left: 27 }, details: "Moving to Canvas (2025)" },
-    { id: 'stanford', name: "Stanford", status: 'stopped', pos: { top: 31, left: 15 }, details: "Migrated (2015)" },
-    { id: 'pepperdine', name: "Pepperdine Univ.", status: 'active', pos: { top: 33, left: 16 }, details: "Strong Sakai Advocate" },
+    // North America
+    { id: 'michigan', name: "Michigan", status: 'stopped', x: 260, y: 115, align: 'right' },
+    { id: 'duke', name: "Duke", status: 'migrating', x: 270, y: 135, align: 'right' },
+    { id: 'stanford', name: "Stanford", status: 'stopped', x: 150, y: 135, align: 'left' },
+    { id: 'pepperdine', name: "Pepperdine", status: 'active', x: 160, y: 150, align: 'right' },
 
     // Africa
-    { id: 'ghana', name: "Univ. of Ghana", status: 'active', pos: { top: 49, left: 49 }, details: "2014 > Present" },
-    { id: 'unisa', name: "UNISA (South Africa)", status: 'stopped', pos: { top: 78, left: 55 }, details: "Migrated to Moodle" }
+    { id: 'ghana', name: "Ghana", status: 'active', x: 480, y: 225, align: 'left' },
+    { id: 'unisa', name: "UNISA", status: 'stopped', x: 540, y: 345, align: 'right' }
 ];
 
 export const GlobalAdoptionMap: React.FC = () => {
-  const [hovered, setHovered] = useState<string | null>(null);
 
   const getStatusColor = (status: Status) => {
       switch(status) {
-          case 'active': return 'bg-green-500 shadow-[0_0_15px_#22c55e]';
-          case 'migrating': return 'bg-orange-500 shadow-[0_0_15px_#f97316]';
-          case 'stopped': return 'bg-red-500 shadow-[0_0_10px_#ef4444]';
+          case 'active': return '#22c55e'; // Green
+          case 'migrating': return '#f97316'; // Orange
+          case 'stopped': return '#ef4444'; // Red
       }
   };
 
   return (
-    <div className="w-full h-full min-h-[500px] bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-800 relative flex items-center justify-center">
+    <div className="w-full h-full min-h-[500px] bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-800 flex items-center justify-center relative">
         
-        {/* Aspect Ratio Container (2:1) locked for World Map */}
-        <div className="relative w-full aspect-[2/1] max-w-5xl mx-auto">
+        {/* 
+            PURE SVG SOLUTION 
+            Everything is drawn inside the same coordinate system (0 0 1000 500).
+            This makes relative drift impossible.
+        */}
+        <svg viewBox="0 0 1000 500" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
             
-            {/* MAP IMAGE */}
-            <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg"
-                alt="World Map"
-                className="w-full h-full object-contain opacity-40 invert"
+            {/* 1. MAP BACKGROUND IMAGE (Embedded inside SVG) */}
+            <image 
+                href="https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg" 
+                x="0" 
+                y="0" 
+                width="1000" 
+                height="500" 
+                opacity="0.4"
+                style={{ filter: 'invert(1)' }} // Dark mode effect
             />
 
-            {/* MARKERS */}
+            {/* 2. CONNECTING LINES & MARKERS */}
             {universities.map((uni) => (
-                <div 
-                    key={uni.id}
-                    className="absolute group z-10"
-                    style={{ top: `${uni.pos.top}%`, left: `${uni.pos.left}%` }}
-                    onMouseEnter={() => setHovered(uni.id)}
-                    onMouseLeave={() => setHovered(null)}
-                >
-                    {/* The Dot */}
-                    <div className={`w-3 h-3 -ml-1.5 -mt-1.5 rounded-full cursor-pointer transition-transform hover:scale-150 ${getStatusColor(uni.status)}`} />
+                <g key={uni.id}>
+                    {/* Glow Effect */}
+                    <circle cx={uni.x} cy={uni.y} r="8" fill={getStatusColor(uni.status)} opacity="0.2">
+                        <animate attributeName="r" values="8;12;8" dur="3s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.2;0;0.2" dur="3s" repeatCount="indefinite" />
+                    </circle>
+                    
+                    {/* Solid Dot */}
+                    <circle cx={uni.x} cy={uni.y} r="3.5" fill={getStatusColor(uni.status)} stroke="#0f172a" strokeWidth="1" />
 
-                    {/* Tooltip */}
-                    <div className={`absolute bottom-4 left-1/2 -translate-x-1/2 w-48 bg-slate-800 p-3 rounded-lg border border-slate-600 shadow-xl z-20 pointer-events-none transition-all duration-200 ${hovered === uni.id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                        <div className="text-white font-bold text-xs mb-1">{uni.name}</div>
-                        <div className="text-slate-400 text-[10px] flex items-center gap-1">
-                            <Info size={10} /> {uni.details}
-                        </div>
-                        <div className={`mt-1 text-[10px] uppercase font-bold ${uni.status === 'active' ? 'text-green-400' : uni.status === 'migrating' ? 'text-orange-400' : 'text-red-400'}`}>
-                            {uni.status === 'active' ? 'Active User' : uni.status === 'migrating' ? 'Migrating' : 'Stopped'}
-                        </div>
-                        {/* Arrow */}
-                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-800 rotate-45 border-b border-r border-slate-600"></div>
-                    </div>
-                </div>
+                    {/* Static Label (Always Visible) */}
+                    <text 
+                        x={uni.x + (uni.align === 'left' ? -8 : 8)} 
+                        y={uni.y + 3} 
+                        fill={getStatusColor(uni.status)} 
+                        fontSize="10" 
+                        fontWeight="bold"
+                        textAnchor={uni.align === 'left' ? 'end' : 'start'}
+                        style={{ textShadow: '0px 1px 3px #000' }}
+                    >
+                        {uni.name}
+                    </text>
+                </g>
             ))}
-        </div>
+        </svg>
 
-        {/* Legend */}
-        <div className="absolute bottom-4 right-4 bg-slate-900/90 p-4 rounded-xl border border-slate-700 backdrop-blur-sm text-xs pointer-events-none z-20">
-            <div className="flex items-center gap-2 mb-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_#22c55e]"></div>
-                <span className="text-slate-300">Aktif Kullanıcı (Active)</span>
+        {/* Static Legend (HTML Overlay) */}
+        <div className="absolute bottom-4 right-4 bg-slate-900/90 p-3 rounded-xl border border-slate-700 backdrop-blur-sm text-[10px] pointer-events-none">
+            <div className="flex items-center gap-2 mb-1">
+                <div className="w-2 h-2 rounded-full bg-green-500"></div> <span className="text-slate-300">Aktif</span>
             </div>
-            <div className="flex items-center gap-2 mb-2">
-                <div className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_5px_#f97316]"></div>
-                <span className="text-slate-300">Geçiş Sürecinde (Migrating)</span>
+            <div className="flex items-center gap-2 mb-1">
+                <div className="w-2 h-2 rounded-full bg-orange-500"></div> <span className="text-slate-300">Geçişte</span>
             </div>
             <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_5px_#ef4444]"></div>
-                <span className="text-slate-300">Bırakanlar (Stopped)</span>
+                <div className="w-2 h-2 rounded-full bg-red-500"></div> <span className="text-slate-300">Bırakan</span>
             </div>
         </div>
     </div>
   );
 };
-    
