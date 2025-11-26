@@ -12,6 +12,7 @@ type Status = 'active' | 'migrating' | 'stopped';
 interface University {
     id: string;
     name: string;
+    details: string; // Added details field
     status: Status;
     x: number; // SVG Coordinate X (0-1000)
     y: number; // SVG Coordinate Y (0-500)
@@ -19,31 +20,30 @@ interface University {
 }
 
 // --- DATA SET (SVG Coordinates 1000x500) ---
-// CALIBRATION V7: Shifted DOWN (South) by 25 units from V6. 
-// This places markers correctly in the Mediterranean band (approx 135px Y for Turkey).
+// COORDINATES LOCKED (V7 Calibration) - DO NOT CHANGE X/Y
 const universities: University[] = [
     // Europe
-    { id: 'murcia', name: "U. Murcia (ES)", status: 'active', x: 480, y: 130, align: 'right' },
-    { id: 'oxford', name: "Oxford (UK)", status: 'stopped', x: 470, y: 100, align: 'left' },
-    { id: 'berlin', name: "Freie Berlin", status: 'active', x: 510, y: 105, align: 'right' },
+    { id: 'murcia', name: "U. Murcia (ES)", details: "2009 > Present", status: 'active', x: 480, y: 130, align: 'right' },
+    { id: 'oxford', name: "Oxford (UK)", details: "To Canvas (2022)", status: 'stopped', x: 470, y: 100, align: 'left' },
+    { id: 'berlin', name: "Freie Berlin", details: "2015 > Present", status: 'active', x: 510, y: 105, align: 'right' },
     
-    // Turkey (Shifted South to 135 - Perfect align for 38N)
-    { id: 'yasar', name: "Yaşar Üni.", status: 'active', x: 555, y: 135, align: 'right' },
+    // Turkey
+    { id: 'yasar', name: "Yaşar Üni.", details: "2012 > Present", status: 'active', x: 555, y: 135, align: 'right' },
     
     // Asia
-    { id: 'lahore', name: "Lahore (PAK)", status: 'active', x: 660, y: 155, align: 'right' },
-    { id: 'kyoto', name: "Kyoto (JP)", status: 'active', x: 860, y: 140, align: 'left' },
-    { id: 'hutech', name: "HUTECH (VN)", status: 'active', x: 780, y: 195, align: 'left' },
+    { id: 'lahore', name: "Lahore (PAK)", details: "2009 > Present", status: 'active', x: 660, y: 155, align: 'right' },
+    { id: 'kyoto', name: "Kyoto (JP)", details: "Custom 'PandA'", status: 'active', x: 860, y: 140, align: 'left' },
+    { id: 'hutech', name: "HUTECH (VN)", details: "2014 > Present", status: 'active', x: 780, y: 195, align: 'left' },
 
     // North America
-    { id: 'michigan', name: "Michigan", status: 'stopped', x: 260, y: 115, align: 'right' },
-    { id: 'duke', name: "Duke", status: 'migrating', x: 270, y: 135, align: 'right' },
-    { id: 'stanford', name: "Stanford", status: 'stopped', x: 150, y: 135, align: 'left' },
-    { id: 'pepperdine', name: "Pepperdine", status: 'active', x: 160, y: 150, align: 'right' },
+    { id: 'michigan', name: "Michigan", details: "To Canvas (2016)", status: 'stopped', x: 260, y: 115, align: 'right' },
+    { id: 'duke', name: "Duke", details: "To Canvas (2025)", status: 'migrating', x: 270, y: 135, align: 'right' },
+    { id: 'stanford', name: "Stanford", details: "To Canvas (2015)", status: 'stopped', x: 150, y: 135, align: 'left' },
+    { id: 'pepperdine', name: "Pepperdine", details: "Sakai Advocate", status: 'active', x: 160, y: 150, align: 'right' },
 
     // Africa
-    { id: 'ghana', name: "Ghana", status: 'active', x: 480, y: 225, align: 'left' },
-    { id: 'unisa', name: "UNISA", status: 'stopped', x: 540, y: 345, align: 'right' }
+    { id: 'ghana', name: "Ghana", details: "2014 > Present", status: 'active', x: 480, y: 225, align: 'left' },
+    { id: 'unisa', name: "UNISA", details: "To Moodle (2022)", status: 'stopped', x: 540, y: 345, align: 'right' }
 ];
 
 export const GlobalAdoptionMap: React.FC = () => {
@@ -93,13 +93,28 @@ export const GlobalAdoptionMap: React.FC = () => {
                     <text 
                         x={uni.x + (uni.align === 'left' ? -8 : 8)} 
                         y={uni.y + 3} 
-                        fill={getStatusColor(uni.status)} 
-                        fontSize="10" 
-                        fontWeight="bold"
                         textAnchor={uni.align === 'left' ? 'end' : 'start'}
-                        style={{ textShadow: '0px 1px 3px #000' }}
+                        style={{ textShadow: '0px 2px 4px #000' }}
                     >
-                        {uni.name}
+                        {/* Line 1: University Name */}
+                        <tspan 
+                            fill={getStatusColor(uni.status)} 
+                            fontSize="11" 
+                            fontWeight="bold"
+                        >
+                            {uni.name}
+                        </tspan>
+                        
+                        {/* Line 2: Details (Timeline/Migration) */}
+                        <tspan 
+                            x={uni.x + (uni.align === 'left' ? -8 : 8)} 
+                            dy="10" 
+                            fill="#94a3b8" 
+                            fontSize="8" 
+                            fontWeight="normal"
+                        >
+                            {uni.details}
+                        </tspan>
                     </text>
                 </g>
             ))}
