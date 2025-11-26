@@ -1027,6 +1027,12 @@ const App: React.FC = () => {
                         </div>
                         <div className="text-xs text-slate-500">Google Groups & Slack</div>
                     </a>
+                    <a href="https://www.youtube.com/@SakaiCLE" target="_blank" rel="noopener noreferrer" className="p-4 bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition-colors group">
+                        <div className="text-sakai-accent font-bold text-sm flex items-center gap-2 mb-1">
+                            Videolar & Öğreticiler <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform"/>
+                        </div>
+                        <div className="text-xs text-slate-500">Eğitim Serileri</div>
+                    </a>
                 </div>
              </div>
         </section>
